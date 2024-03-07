@@ -51,7 +51,7 @@ android {
         applicationId "com.mycompany.shopsync"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode flutterVersionCode.toInteger()
+        versionCode 2 //flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
