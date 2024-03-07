@@ -1745,12 +1745,16 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   Colors
                                                                       .transparent,
                                                               onTap: () async {
-                                                                await FirebaseStorage
-                                                                    .instance
-                                                                    .refFromURL(
-                                                                        listViewItemsRecord
-                                                                            .itemImage)
-                                                                    .delete();
+                                                                if (listViewItemsRecord
+                                                                            .itemImage !=
+                                                                        '') {
+                                                                  await FirebaseStorage
+                                                                      .instance
+                                                                      .refFromURL(
+                                                                          listViewItemsRecord
+                                                                              .itemImage)
+                                                                      .delete();
+                                                                }
                                                                 await listViewItemsRecord
                                                                     .reference
                                                                     .delete();
