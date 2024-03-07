@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "108471590770",
+    "firebase_url": "https://shopsync-a8aa2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "shopsync-a8aa2",
+    "storage_bucket": "shopsync-a8aa2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108471590770:android:79a76bb4fb41c9683507eb",
+        "android_client_info": {
+          "package_name": "com.mycompany.shopsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3tIyS72cGLqL4OGs8yjAlp-xvObpV0zc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
