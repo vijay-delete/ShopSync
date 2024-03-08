@@ -504,26 +504,19 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                           singleRecord: true,
                         ).then((s) => s.firstOrNull);
 
-                        await widget.item!.reference.update({
-                          ...createItemsRecordData(
-                            name: _model.textController1.text,
-                            description: _model.textController2.text,
-                            itemImage: _model.itemImage,
-                            addedBy: widget.userRef,
-                            count: _model.countControllerValue,
-                            group: _model.selectedGroupRef?.reference,
-                            isBought: false,
-                            isDicarded: false,
-                            isNew: true,
-                            modifiedOn: getCurrentTimestamp,
-                            modifiedBy: widget.userRef,
-                          ),
-                          ...mapToFirestore(
-                            {
-                              'DateAdded': FieldValue.serverTimestamp(),
-                            },
-                          ),
-                        });
+                        await widget.item!.reference
+                            .update(createItemsRecordData(
+                          name: _model.textController1.text,
+                          description: _model.textController2.text,
+                          itemImage: _model.itemImage,
+                          count: _model.countControllerValue,
+                          group: _model.selectedGroupRef?.reference,
+                          isBought: false,
+                          isDicarded: false,
+                          isNew: true,
+                          modifiedOn: getCurrentTimestamp,
+                          modifiedBy: widget.userRef,
+                        ));
 
                         context.pushNamed(
                           'HomePage',
