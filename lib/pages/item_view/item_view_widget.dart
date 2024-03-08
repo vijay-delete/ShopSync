@@ -62,7 +62,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
     _model.textFieldFocusNode11 ??= FocusNode();
 
     _model.textController12 ??= TextEditingController(
-        text: dateTimeFormat('d/M/y', widget.item?.discardedOn));
+        text: dateTimeFormat('d/M/y', widget.item?.modifiedOn));
     _model.textFieldFocusNode12 ??= FocusNode();
   }
 
@@ -887,7 +887,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                   padding:
                       const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
                   child: StreamBuilder<UsersRecord>(
-                    stream: UsersRecord.getDocument(widget.item!.discardedBy!),
+                    stream: UsersRecord.getDocument(widget.item!.modifiedBy!),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
                       if (!snapshot.hasData) {
