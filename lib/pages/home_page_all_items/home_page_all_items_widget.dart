@@ -591,6 +591,11 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                       listViewItemsRecord,
                                                       ParamType.Document,
                                                     ),
+                                                    'userRef': serializeParam(
+                                                      widget.user?.reference,
+                                                      ParamType
+                                                          .DocumentReference,
+                                                    ),
                                                   }.withoutNulls,
                                                   extra: <String, dynamic>{
                                                     'item': listViewItemsRecord,
@@ -918,6 +923,11 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                     'item': serializeParam(
                                                       listViewItemsRecord,
                                                       ParamType.Document,
+                                                    ),
+                                                    'userRef': serializeParam(
+                                                      widget.user?.reference,
+                                                      ParamType
+                                                          .DocumentReference,
                                                     ),
                                                   }.withoutNulls,
                                                   extra: <String, dynamic>{
@@ -1247,6 +1257,11 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                     'item': serializeParam(
                                                       listViewItemsRecord,
                                                       ParamType.Document,
+                                                    ),
+                                                    'userRef': serializeParam(
+                                                      widget.user?.reference,
+                                                      ParamType
+                                                          .DocumentReference,
                                                     ),
                                                   }.withoutNulls,
                                                   extra: <String, dynamic>{

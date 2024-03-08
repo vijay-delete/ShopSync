@@ -153,6 +153,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           },
           builder: (context, params) => ItemViewWidget(
             item: params.getParam('item', ParamType.Document),
+            userRef: params.getParam(
+                'userRef', ParamType.DocumentReference, false, ['Users']),
           ),
         ),
         FFRoute(

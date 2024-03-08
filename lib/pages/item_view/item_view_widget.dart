@@ -10,9 +10,11 @@ class ItemViewWidget extends StatefulWidget {
   const ItemViewWidget({
     super.key,
     required this.item,
+    required this.userRef,
   });
 
   final ItemsRecord? item;
+  final DocumentReference? userRef;
 
   @override
   State<ItemViewWidget> createState() => _ItemViewWidgetState();

@@ -793,6 +793,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                         listViewItemsRecord,
                                                         ParamType.Document,
                                                       ),
+                                                      'userRef': serializeParam(
+                                                        homePageUsersRecord
+                                                            ?.reference,
+                                                        ParamType
+                                                            .DocumentReference,
+                                                      ),
                                                     }.withoutNulls,
                                                     extra: <String, dynamic>{
                                                       'item':
@@ -1139,6 +1145,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       'item': serializeParam(
                                                         listViewItemsRecord,
                                                         ParamType.Document,
+                                                      ),
+                                                      'userRef': serializeParam(
+                                                        homePageUsersRecord
+                                                            ?.reference,
+                                                        ParamType
+                                                            .DocumentReference,
                                                       ),
                                                     }.withoutNulls,
                                                     extra: <String, dynamic>{
@@ -1487,6 +1499,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       'item': serializeParam(
                                                         listViewItemsRecord,
                                                         ParamType.Document,
+                                                      ),
+                                                      'userRef': serializeParam(
+                                                        homePageUsersRecord
+                                                            ?.reference,
+                                                        ParamType
+                                                            .DocumentReference,
                                                       ),
                                                     }.withoutNulls,
                                                     extra: <String, dynamic>{
