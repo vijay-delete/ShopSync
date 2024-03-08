@@ -1323,19 +1323,37 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                               onTap: () async {
                                                                 await listViewItemsRecord
                                                                     .reference
-                                                                    .update(
-                                                                        createItemsRecordData(
-                                                                  isBought:
-                                                                      false,
-                                                                  isDicarded:
-                                                                      false,
-                                                                  isNew: true,
-                                                                  dateAdded:
-                                                                      getCurrentTimestamp,
-                                                                  addedBy:
-                                                                      homePageUsersRecord
-                                                                          ?.reference,
-                                                                ));
+                                                                    .update({
+                                                                  ...createItemsRecordData(
+                                                                    isBought:
+                                                                        false,
+                                                                    isDicarded:
+                                                                        false,
+                                                                    isNew: true,
+                                                                  ),
+                                                                  ...mapToFirestore(
+                                                                    {
+                                                                      'BoughtOn':
+                                                                          FieldValue
+                                                                              .delete(),
+                                                                      'BoughtBy':
+                                                                          FieldValue
+                                                                              .delete(),
+                                                                      'DiscardedBy':
+                                                                          FieldValue
+                                                                              .delete(),
+                                                                      'DiscardedOn':
+                                                                          FieldValue
+                                                                              .delete(),
+                                                                      'ModifiedOn':
+                                                                          FieldValue
+                                                                              .delete(),
+                                                                      'ModifiedBy':
+                                                                          FieldValue
+                                                                              .delete(),
+                                                                    },
+                                                                  ),
+                                                                });
                                                               },
                                                               child: Column(
                                                                 mainAxisSize:
@@ -1708,19 +1726,28 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                         () async {
                                                                       await listViewItemsRecord
                                                                           .reference
-                                                                          .update(
-                                                                              createItemsRecordData(
-                                                                        isBought:
-                                                                            false,
-                                                                        isDicarded:
-                                                                            false,
-                                                                        isNew:
-                                                                            true,
-                                                                        modifiedOn:
-                                                                            getCurrentTimestamp,
-                                                                        modifiedBy:
-                                                                            homePageUsersRecord?.reference,
-                                                                      ));
+                                                                          .update({
+                                                                        ...createItemsRecordData(
+                                                                          isBought:
+                                                                              false,
+                                                                          isDicarded:
+                                                                              false,
+                                                                          isNew:
+                                                                              true,
+                                                                        ),
+                                                                        ...mapToFirestore(
+                                                                          {
+                                                                            'BoughtOn':
+                                                                                FieldValue.delete(),
+                                                                            'BoughtBy':
+                                                                                FieldValue.delete(),
+                                                                            'DiscardedBy':
+                                                                                FieldValue.delete(),
+                                                                            'DiscardedOn':
+                                                                                FieldValue.delete(),
+                                                                          },
+                                                                        ),
+                                                                      });
                                                                     },
                                                                     child:
                                                                         Column(

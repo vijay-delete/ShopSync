@@ -768,6 +768,11 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 isDicarded:
                                                                     false,
                                                                 isNew: false,
+                                                                boughtOn:
+                                                                    getCurrentTimestamp,
+                                                                boughtBy: widget
+                                                                    .user
+                                                                    ?.reference,
                                                               ));
                                                             },
                                                             child: Column(
@@ -818,6 +823,11 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 isDicarded:
                                                                     true,
                                                                 isNew: false,
+                                                                discardedBy: widget
+                                                                    .user
+                                                                    ?.reference,
+                                                                discardedOn:
+                                                                    getCurrentTimestamp,
                                                               ));
                                                             },
                                                             child: Column(
@@ -1095,13 +1105,31 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                             onTap: () async {
                                                               await listViewItemsRecord
                                                                   .reference
-                                                                  .update(
-                                                                      createItemsRecordData(
-                                                                isBought: false,
-                                                                isDicarded:
-                                                                    false,
-                                                                isNew: true,
-                                                              ));
+                                                                  .update({
+                                                                ...createItemsRecordData(
+                                                                  isBought:
+                                                                      false,
+                                                                  isDicarded:
+                                                                      false,
+                                                                  isNew: true,
+                                                                ),
+                                                                ...mapToFirestore(
+                                                                  {
+                                                                    'BoughtOn':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                    'BoughtBy':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                    'DiscardedBy':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                    'DiscardedOn':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                  },
+                                                                ),
+                                                              });
                                                             },
                                                             child: Column(
                                                               mainAxisSize:
@@ -1152,6 +1180,11 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 isDicarded:
                                                                     true,
                                                                 isNew: false,
+                                                                discardedBy: widget
+                                                                    .user
+                                                                    ?.reference,
+                                                                discardedOn:
+                                                                    getCurrentTimestamp,
                                                               ));
                                                             },
                                                             child: Column(
@@ -1429,13 +1462,31 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                             onTap: () async {
                                                               await listViewItemsRecord
                                                                   .reference
-                                                                  .update(
-                                                                      createItemsRecordData(
-                                                                isBought: false,
-                                                                isDicarded:
-                                                                    false,
-                                                                isNew: true,
-                                                              ));
+                                                                  .update({
+                                                                ...createItemsRecordData(
+                                                                  isBought:
+                                                                      false,
+                                                                  isDicarded:
+                                                                      false,
+                                                                  isNew: true,
+                                                                ),
+                                                                ...mapToFirestore(
+                                                                  {
+                                                                    'BoughtOn':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                    'BoughtBy':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                    'DiscardedBy':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                    'DiscardedOn':
+                                                                        FieldValue
+                                                                            .delete(),
+                                                                  },
+                                                                ),
+                                                              });
                                                             },
                                                             child: Column(
                                                               mainAxisSize:
