@@ -1716,9 +1716,9 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                             false,
                                                                         isNew:
                                                                             true,
-                                                                        dateAdded:
+                                                                        modifiedOn:
                                                                             getCurrentTimestamp,
-                                                                        addedBy:
+                                                                        modifiedBy:
                                                                             homePageUsersRecord?.reference,
                                                                       ));
                                                                     },
@@ -1764,18 +1764,44 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                       .transparent,
                                                               onTap: () async {
                                                                 if (listViewItemsRecord
-                                                                            .itemImage !=
-                                                                        '') {
-                                                                  await FirebaseStorage
-                                                                      .instance
-                                                                      .refFromURL(
-                                                                          listViewItemsRecord
-                                                                              .itemImage)
+                                                                        .addedBy ==
+                                                                    homePageUsersRecord
+                                                                        ?.reference) {
+                                                                  if (listViewItemsRecord
+                                                                              .itemImage !=
+                                                                          '') {
+                                                                    await FirebaseStorage
+                                                                        .instance
+                                                                        .refFromURL(
+                                                                            listViewItemsRecord.itemImage)
+                                                                        .delete();
+                                                                  }
+                                                                  await listViewItemsRecord
+                                                                      .reference
                                                                       .delete();
+                                                                } else {
+                                                                  await showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (alertDialogContext) {
+                                                                      return AlertDialog(
+                                                                        title: const Text(
+                                                                            'Alert'),
+                                                                        content:
+                                                                            const Text('Only owner can delete item'),
+                                                                        actions: [
+                                                                          TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(alertDialogContext),
+                                                                            child:
+                                                                                const Text('Ok'),
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  );
                                                                 }
-                                                                await listViewItemsRecord
-                                                                    .reference
-                                                                    .delete();
                                                               },
                                                               child: Column(
                                                                 mainAxisSize:

@@ -1478,15 +1478,46 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 Colors
                                                                     .transparent,
                                                             onTap: () async {
-                                                              await FirebaseStorage
-                                                                  .instance
-                                                                  .refFromURL(
-                                                                      listViewItemsRecord
-                                                                          .itemImage)
-                                                                  .delete();
-                                                              await listViewItemsRecord
-                                                                  .group!
-                                                                  .delete();
+                                                              if (listViewItemsRecord
+                                                                      .addedBy ==
+                                                                  widget.user
+                                                                      ?.reference) {
+                                                                if (listViewItemsRecord
+                                                                            .itemImage !=
+                                                                        '') {
+                                                                  await FirebaseStorage
+                                                                      .instance
+                                                                      .refFromURL(
+                                                                          listViewItemsRecord
+                                                                              .itemImage)
+                                                                      .delete();
+                                                                }
+                                                                await listViewItemsRecord
+                                                                    .group!
+                                                                    .delete();
+                                                              } else {
+                                                                await showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (alertDialogContext) {
+                                                                    return AlertDialog(
+                                                                      title: const Text(
+                                                                          'Alert'),
+                                                                      content: const Text(
+                                                                          'Only owner can delete item'),
+                                                                      actions: [
+                                                                        TextButton(
+                                                                          onPressed: () =>
+                                                                              Navigator.pop(alertDialogContext),
+                                                                          child:
+                                                                              const Text('Ok'),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                );
+                                                              }
                                                             },
                                                             child: Column(
                                                               mainAxisSize:
