@@ -516,6 +516,7 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                           isNew: true,
                           modifiedOn: getCurrentTimestamp,
                           modifiedBy: widget.userRef,
+                          dateAdded: widget.item?.dateAdded,
                         ));
 
                         context.pushNamed(
