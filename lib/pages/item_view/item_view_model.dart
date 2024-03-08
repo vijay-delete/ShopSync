@@ -60,10 +60,6 @@ class ItemViewModel extends FlutterFlowModel<ItemViewWidget> {
   FocusNode? textFieldFocusNode12;
   TextEditingController? textController12;
   String? Function(BuildContext, String?)? textController12Validator;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode13;
-  TextEditingController? textController13;
-  String? Function(BuildContext, String?)? textController13Validator;
 
   /// Initialization and disposal methods.
 
@@ -108,9 +104,6 @@ class ItemViewModel extends FlutterFlowModel<ItemViewWidget> {
 
     textFieldFocusNode12?.dispose();
     textController12?.dispose();
-
-    textFieldFocusNode13?.dispose();
-    textController13?.dispose();
   }
 
   /// Action blocks are added here.

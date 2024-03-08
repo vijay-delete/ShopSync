@@ -66,9 +66,6 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
     _model.textController12 ??= TextEditingController(
         text: dateTimeFormat('d/M/y', widget.item?.modifiedOn));
     _model.textFieldFocusNode12 ??= FocusNode();
-
-    _model.textController13 ??= TextEditingController(text: widget.userRef?.id);
-    _model.textFieldFocusNode13 ??= FocusNode();
   }
 
   @override
@@ -1028,7 +1025,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                           ParamType.Document,
                         ),
                         'userRef': serializeParam(
-                          widget.item?.addedBy,
+                          widget.userRef,
                           ParamType.DocumentReference,
                         ),
                       }.withoutNulls,
@@ -1059,59 +1056,6 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                   ),
                 ),
               ),
-              if (widget.item?.modifiedBy != null)
-                Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                  child: TextFormField(
-                    controller: _model.textController13,
-                    focusNode: _model.textFieldFocusNode13,
-                    autofocus: true,
-                    readOnly: true,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      labelText: 'Modified by',
-                      labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                      hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).primary,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).error,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).error,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      filled: true,
-                      fillColor: FlutterFlowTheme.of(context).accent2,
-                      suffixIcon: const Icon(
-                        Icons.person,
-                      ),
-                    ),
-                    style: FlutterFlowTheme.of(context).bodyMedium,
-                    validator:
-                        _model.textController13Validator.asValidator(context),
-                  ),
-                ),
             ],
           ),
         ),
