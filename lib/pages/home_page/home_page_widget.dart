@@ -5,7 +5,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:collection/collection.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -38,15 +37,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (widget.selectedGroupRef == null) {
-        _model.userDocForIntialGroup = await queryUsersRecordOnce(
-          queryBuilder: (usersRecord) => usersRecord.where(
-            'PhoneNo',
-            isEqualTo: currentPhoneNumber,
-          ),
-          singleRecord: true,
-        ).then((s) => s.firstOrNull);
+        _model.authUser =
+            await UsersRecord.getDocumentOnce(currentUserReference!);
         setState(() {
-          _model.selectedGroup = _model.userDocForIntialGroup?.groups.first;
+          _model.selectedGroup = _model.authUser?.groups.first;
         });
       } else {
         setState(() {
@@ -225,7 +219,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                           5.0, 0.0, 0.0, 0.0),
                                       child: AuthUserStreamWidget(
                                         builder: (context) => Text(
-                                          currentUserDisplayName,
+                                          valueOrDefault<String>(
+                                            currentUserDisplayName,
+                                            '[Name]',
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
                                         ),

@@ -15,16 +15,6 @@ class UsersRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "Name" field.
-  String? _name;
-  String get name => _name ?? '';
-  bool hasName() => _name != null;
-
-  // "PhoneNo" field.
-  String? _phoneNo;
-  String get phoneNo => _phoneNo ?? '';
-  bool hasPhoneNo() => _phoneNo != null;
-
   // "Groups" field.
   List<DocumentReference>? _groups;
   List<DocumentReference> get groups => _groups ?? const [];
@@ -61,8 +51,6 @@ class UsersRecord extends FirestoreRecord {
   bool hasPhoneNumber() => _phoneNumber != null;
 
   void _initializeFields() {
-    _name = snapshotData['Name'] as String?;
-    _phoneNo = snapshotData['PhoneNo'] as String?;
     _groups = getDataList(snapshotData['Groups']);
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -106,8 +94,6 @@ class UsersRecord extends FirestoreRecord {
 }
 
 Map<String, dynamic> createUsersRecordData({
-  String? name,
-  String? phoneNo,
   String? email,
   String? displayName,
   String? photoUrl,
@@ -117,8 +103,6 @@ Map<String, dynamic> createUsersRecordData({
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'Name': name,
-      'PhoneNo': phoneNo,
       'email': email,
       'display_name': displayName,
       'photo_url': photoUrl,
@@ -137,9 +121,7 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
   @override
   bool equals(UsersRecord? e1, UsersRecord? e2) {
     const listEquality = ListEquality();
-    return e1?.name == e2?.name &&
-        e1?.phoneNo == e2?.phoneNo &&
-        listEquality.equals(e1?.groups, e2?.groups) &&
+    return listEquality.equals(e1?.groups, e2?.groups) &&
         e1?.email == e2?.email &&
         e1?.displayName == e2?.displayName &&
         e1?.photoUrl == e2?.photoUrl &&
@@ -150,8 +132,6 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
 
   @override
   int hash(UsersRecord? e) => const ListEquality().hash([
-        e?.name,
-        e?.phoneNo,
         e?.groups,
         e?.email,
         e?.displayName,

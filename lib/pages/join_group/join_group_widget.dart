@@ -98,7 +98,8 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                 .labelMedium
                                 .override(
                                   fontFamily: 'Readex Pro',
-                                  color: FlutterFlowTheme.of(context).info,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                 ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -134,11 +135,12 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                               Icons.groups_2,
                             ),
                           ),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    color: FlutterFlowTheme.of(context).info,
-                                  ),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                           validator: _model.textController1Validator
                               .asValidator(context),
                         ),
@@ -407,7 +409,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                         return TextFormField(
                           controller: _model.textController4 ??=
                               TextEditingController(
-                            text: textFieldUsersRecord.name,
+                            text: textFieldUsersRecord.displayName,
                           ),
                           focusNode: _model.textFieldFocusNode4,
                           autofocus: true,
@@ -577,7 +579,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                             ],
                                           ),
                                           Text(
-                                            usersListItem.name,
+                                            usersListItem.displayName,
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

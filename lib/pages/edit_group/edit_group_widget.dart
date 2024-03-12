@@ -309,6 +309,9 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .info,
                                                 fontSize: 12.0,
                                               ),
                                         ),
@@ -507,7 +510,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                       await queryUsersRecordOnce(
                                     queryBuilder: (usersRecord) =>
                                         usersRecord.where(
-                                      'PhoneNo',
+                                      'phone_number',
                                       isEqualTo: _model.textController3.text,
                                     ),
                                     singleRecord: true,
@@ -531,8 +534,8 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                           const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
                       child: Stack(
                         children: [
-                          if (_model.queriedUser?.name != null &&
-                              _model.queriedUser?.name != '')
+                          if (_model.queriedUser?.displayName != null &&
+                              _model.queriedUser?.displayName != '')
                             Align(
                               alignment: const AlignmentDirectional(0.0, 0.0),
                               child: Container(
@@ -594,7 +597,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                     ),
                                     Text(
                                       valueOrDefault<String>(
-                                        _model.queriedUser?.name,
+                                        _model.queriedUser?.displayName,
                                         '[Name]',
                                       ),
                                       style: FlutterFlowTheme.of(context)
@@ -744,7 +747,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                               ],
                                             ),
                                             Text(
-                                              usersListItem.name,
+                                              usersListItem.displayName,
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyMedium

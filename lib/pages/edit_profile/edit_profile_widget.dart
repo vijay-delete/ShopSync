@@ -274,6 +274,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Readex Pro',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
                                               fontSize: 12.0,
                                             ),
                                       ),
@@ -633,9 +636,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
                         await currentUserReference!.update({
                           ...createUsersRecordData(
-                            name: _model.textController1.text,
                             email: _model.textController3.text,
                             photoUrl: '',
+                            displayName: _model.textController1.text,
                           ),
                           ...mapToFirestore(
                             {

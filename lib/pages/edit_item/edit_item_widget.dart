@@ -285,6 +285,9 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Readex Pro',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .info,
                                               fontSize: 12.0,
                                             ),
                                       ),

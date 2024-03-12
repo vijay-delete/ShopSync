@@ -274,6 +274,9 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .info,
                                                 fontSize: 12.0,
                                               ),
                                         ),
@@ -417,7 +420,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                       await queryUsersRecordOnce(
                                     queryBuilder: (usersRecord) =>
                                         usersRecord.where(
-                                      'PhoneNo',
+                                      'phone_number',
                                       isEqualTo: _model.textController2.text,
                                     ),
                                     singleRecord: true,
@@ -441,8 +444,8 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                           const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
                       child: Stack(
                         children: [
-                          if (_model.queriedUser?.name != null &&
-                              _model.queriedUser?.name != '')
+                          if (_model.queriedUser?.displayName != null &&
+                              _model.queriedUser?.displayName != '')
                             Align(
                               alignment: const AlignmentDirectional(0.0, 0.0),
                               child: Container(
@@ -507,7 +510,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                       ),
                                       Text(
                                         valueOrDefault<String>(
-                                          _model.queriedUser?.name,
+                                          _model.queriedUser?.displayName,
                                           '[Name]',
                                         ),
                                         style: FlutterFlowTheme.of(context)
@@ -603,42 +606,31 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                   color: FlutterFlowTheme.of(context).alternate,
                                 ),
                               ),
-                              child: Builder(
-                                builder: (context) {
-                                  final usersList = _model.users.toList();
-                                  return ListView.separated(
-                                    padding: EdgeInsets.zero,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: usersList.length,
-                                    separatorBuilder: (_, __) =>
-                                        const SizedBox(height: 5.0),
-                                    itemBuilder: (context, usersListIndex) {
-                                      final usersListItem =
-                                          usersList[usersListIndex];
-                                      return Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 2.0, 10.0, 0.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Stack(
-                                              children: [
-                                                Container(
-                                                  width: 38.0,
-                                                  height: 38.0,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration: const BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Image.asset(
-                                                    'assets/images/UserIcon.png',
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                if (usersListItem.photoUrl !=
-                                                        '')
+                              child: Align(
+                                alignment: const AlignmentDirectional(0.0, -1.0),
+                                child: Builder(
+                                  builder: (context) {
+                                    final usersList = _model.users.toList();
+                                    return ListView.separated(
+                                      padding: EdgeInsets.zero,
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: usersList.length,
+                                      separatorBuilder: (_, __) =>
+                                          const SizedBox(height: 5.0),
+                                      itemBuilder: (context, usersListIndex) {
+                                        final usersListItem =
+                                            usersList[usersListIndex];
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 2.0, 10.0, 0.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Stack(
+                                                children: [
                                                   Container(
                                                     width: 38.0,
                                                     height: 38.0,
@@ -647,55 +639,75 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                                     decoration: const BoxDecoration(
                                                       shape: BoxShape.circle,
                                                     ),
-                                                    child: Image.network(
-                                                      usersListItem.photoUrl,
+                                                    child: Image.asset(
+                                                      'assets/images/UserIcon.png',
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                              ],
-                                            ),
-                                            Text(
-                                              usersListItem.name,
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
+                                                  if (usersListItem.photoUrl !=
+                                                          '')
+                                                    Container(
+                                                      width: 38.0,
+                                                      height: 38.0,
+                                                      clipBehavior:
+                                                          Clip.antiAlias,
+                                                      decoration: const BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Image.network(
+                                                        usersListItem.photoUrl,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                              Text(
+                                                usersListItem.displayName,
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      fontFamily: 'Readex Pro',
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                    ),
+                                              ),
+                                              Align(
+                                                alignment: const AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    setState(() {
+                                                      _model.removeFromUsers(
+                                                          usersListItem);
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                    Icons.remove,
                                                     color: FlutterFlowTheme.of(
                                                             context)
-                                                        .primaryText,
+                                                        .error,
+                                                    size: 24.0,
                                                   ),
-                                            ),
-                                            Align(
-                                              alignment: const AlignmentDirectional(
-                                                  0.0, 0.0),
-                                              child: InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                onTap: () async {
-                                                  setState(() {
-                                                    _model.removeFromUsers(
-                                                        usersListItem);
-                                                  });
-                                                },
-                                                child: Icon(
-                                                  Icons.remove,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  size: 24.0,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),

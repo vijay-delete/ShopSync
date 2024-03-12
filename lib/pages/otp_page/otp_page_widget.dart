@@ -46,8 +46,8 @@ class _OtpPageWidgetState extends State<OtpPageWidget> {
     return StreamBuilder<List<UsersRecord>>(
       stream: queryUsersRecord(
         queryBuilder: (usersRecord) => usersRecord.where(
-          'PhoneNo',
-          isEqualTo: widget.phoneNo,
+          'phone_number',
+          isEqualTo: _model.textController.text,
         ),
         singleRecord: true,
       ),

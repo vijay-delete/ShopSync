@@ -219,14 +219,17 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                                   0.0, 0.0),
                                               child: Text(
                                                 'Upload Image',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 12.0,
-                                                        ),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      fontFamily: 'Readex Pro',
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .info,
+                                                      fontSize: 12.0,
+                                                    ),
                                               ),
                                             ),
                                           ],
@@ -369,7 +372,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                               _model.queriedUser = await queryUsersRecordOnce(
                                 queryBuilder: (usersRecord) =>
                                     usersRecord.where(
-                                  'PhoneNo',
+                                  'phone_number',
                                   isEqualTo: _model.textController2.text,
                                 ),
                                 singleRecord: true,
@@ -393,8 +396,8 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                       const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
                   child: Stack(
                     children: [
-                      if (_model.queriedUser?.name != null &&
-                          _model.queriedUser?.name != '')
+                      if (_model.queriedUser?.displayName != null &&
+                          _model.queriedUser?.displayName != '')
                         Align(
                           alignment: const AlignmentDirectional(0.0, 0.0),
                           child: Container(
@@ -451,7 +454,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                 ),
                                 Text(
                                   valueOrDefault<String>(
-                                    _model.queriedUser?.name,
+                                    _model.queriedUser?.displayName,
                                     '[Name]',
                                   ),
                                   style: FlutterFlowTheme.of(context)
@@ -593,7 +596,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                           ],
                                         ),
                                         Text(
-                                          usersListItem.name,
+                                          usersListItem.displayName,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -750,7 +753,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                   textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
-                        color: FlutterFlowTheme.of(context).primaryBackground,
+                        color: FlutterFlowTheme.of(context).primaryText,
                       ),
                 ),
                 Padding(
@@ -786,7 +789,8 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                 const Align(
                   alignment: AlignmentDirectional(0.0, 1.0),
                   child: FlutterFlowAdBanner(
-                    height: 50.0,
+                    width: double.infinity,
+                    height: double.infinity,
                     showsTestAd: true,
                     androidAdUnitID: 'ca-app-pub-9120942427839383/6415981878',
                   ),

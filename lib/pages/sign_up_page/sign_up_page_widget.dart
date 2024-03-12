@@ -419,9 +419,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                 child: FFButtonWidget(
                   onPressed: () async {
                     await currentUserReference!.update(createUsersRecordData(
-                      name: _model.textController1.text,
                       email: _model.textController2.text,
                       photoUrl: _model.userImage,
+                      displayName: _model.textController1.text,
                     ));
 
                     context.pushNamed('IntialGroupCreation');

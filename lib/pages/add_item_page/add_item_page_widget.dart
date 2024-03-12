@@ -278,6 +278,9 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .info,
                                                 fontSize: 12.0,
                                               ),
                                         ),

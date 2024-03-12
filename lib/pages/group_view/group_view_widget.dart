@@ -320,7 +320,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                           return TextFormField(
                             controller: _model.textController3 ??=
                                 TextEditingController(
-                              text: textFieldUsersRecord.name,
+                              text: textFieldUsersRecord.displayName,
                             ),
                             focusNode: _model.textFieldFocusNode3,
                             autofocus: true,
@@ -487,7 +487,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                               ],
                                             ),
                                             Text(
-                                              usersListItem.name,
+                                              usersListItem.displayName,
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyMedium

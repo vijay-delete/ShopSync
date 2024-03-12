@@ -399,7 +399,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                     return TextFormField(
                       controller: _model.textController5 ??=
                           TextEditingController(
-                        text: textFieldUsersRecord.name,
+                        text: textFieldUsersRecord.displayName,
                       ),
                       focusNode: _model.textFieldFocusNode5,
                       autofocus: true,
@@ -667,7 +667,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       return TextFormField(
                         controller: _model.textController7 ??=
                             TextEditingController(
-                          text: textFieldUsersRecord.name,
+                          text: textFieldUsersRecord.displayName,
                         ),
                         focusNode: _model.textFieldFocusNode7,
                         autofocus: true,
@@ -802,7 +802,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       return TextFormField(
                         controller: _model.textController9 ??=
                             TextEditingController(
-                          text: textFieldUsersRecord.name,
+                          text: textFieldUsersRecord.displayName,
                         ),
                         focusNode: _model.textFieldFocusNode9,
                         autofocus: true,
@@ -937,7 +937,7 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       return TextFormField(
                         controller: _model.textController11 ??=
                             TextEditingController(
-                          text: textFieldUsersRecord.name,
+                          text: textFieldUsersRecord.displayName,
                         ),
                         focusNode: _model.textFieldFocusNode11,
                         autofocus: true,

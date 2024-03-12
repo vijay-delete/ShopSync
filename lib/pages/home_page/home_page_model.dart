@@ -11,8 +11,8 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // Stores action output result for [Firestore Query - Query a collection] action in HomePage widget.
-  UsersRecord? userDocForIntialGroup;
+  // Stores action output result for [Backend Call - Read Document] action in HomePage widget.
+  UsersRecord? authUser;
   // State field(s) for TabBar widget.
   TabController? tabBarController;
   int get tabBarCurrentIndex =>
