@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -12,11 +13,9 @@ class GroupViewWidget extends StatefulWidget {
   const GroupViewWidget({
     super.key,
     required this.group,
-    required this.userDocument,
   });
 
   final GroupsRecord? group;
-  final UsersRecord? userDocument;
 
   @override
   State<GroupViewWidget> createState() => _GroupViewWidgetState();
@@ -227,7 +226,10 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                             Icons.groups_2,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController1Validator
                             .asValidator(context),
                       ),
@@ -282,7 +284,12 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                               color: FlutterFlowTheme.of(context).primary,
                             ),
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                           validator: _model.textController2Validator
                               .asValidator(context),
                         ),
@@ -359,7 +366,13 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                 Icons.person,
                               ),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
                             validator: _model.textController3Validator
                                 .asValidator(context),
                           );
@@ -393,6 +406,8 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 16.0,
                                       ),
                                 ),
@@ -454,7 +469,8 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                if (usersListItem.image != '')
+                                                if (usersListItem.photoUrl !=
+                                                        '')
                                                   Container(
                                                     width: 38.0,
                                                     height: 38.0,
@@ -464,7 +480,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Image.network(
-                                                      usersListItem.image,
+                                                      usersListItem.photoUrl,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
@@ -472,9 +488,15 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                             ),
                                             Text(
                                               usersListItem.name,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                  ),
                                             ),
                                           ],
                                         ),
@@ -488,8 +510,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                         ],
                       ),
                     ),
-                    if (widget.group?.groupAdmin ==
-                        widget.userDocument?.reference)
+                    if (widget.group?.groupAdmin == currentUserReference)
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(
                             15.0, 0.0, 15.0, 10.0),
@@ -502,14 +523,9 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                   widget.group,
                                   ParamType.Document,
                                 ),
-                                'authUser': serializeParam(
-                                  widget.userDocument,
-                                  ParamType.Document,
-                                ),
                               }.withoutNulls,
                               extra: <String, dynamic>{
                                 'group': widget.group,
-                                'authUser': widget.userDocument,
                               },
                             );
                           },
@@ -544,13 +560,12 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                         onPressed: () async {
                           if (widget.group!.users.length > 1) {
                             if (widget.group?.groupAdmin ==
-                                widget.userDocument?.reference) {
+                                currentUserReference) {
                               await widget.group!.reference
                                   .update(createGroupsRecordData(
                                 groupAdmin: widget.group?.users
-                                    .where((e) =>
-                                        e.id !=
-                                        widget.userDocument?.reference.id)
+                                    .where(
+                                        (e) => e.id != currentUserReference?.id)
                                     .toList()
                                     .first,
                               ));
@@ -560,12 +575,12 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                               ...mapToFirestore(
                                 {
                                   'Users': FieldValue.arrayRemove(
-                                      [widget.userDocument?.reference]),
+                                      [currentUserReference]),
                                 },
                               ),
                             });
 
-                            await widget.userDocument!.reference.update({
+                            await currentUserReference!.update({
                               ...mapToFirestore(
                                 {
                                   'Groups': FieldValue.arrayRemove(
@@ -574,18 +589,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                               ),
                             });
 
-                            context.pushNamed(
-                              'HomePageAllItems',
-                              queryParameters: {
-                                'user': serializeParam(
-                                  widget.userDocument,
-                                  ParamType.Document,
-                                ),
-                              }.withoutNulls,
-                              extra: <String, dynamic>{
-                                'user': widget.userDocument,
-                              },
-                            );
+                            context.pushNamed('HomePageAllItems');
                           } else {
                             var confirmDialogResponse = await showDialog<bool>(
                                   context: context,
@@ -618,7 +622,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                     .delete();
                               }
 
-                              await widget.userDocument!.reference.update({
+                              await currentUserReference!.update({
                                 ...mapToFirestore(
                                   {
                                     'Groups': FieldValue.arrayRemove(
@@ -627,18 +631,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                 ),
                               });
 
-                              context.pushNamed(
-                                'HomePageAllItems',
-                                queryParameters: {
-                                  'user': serializeParam(
-                                    widget.userDocument,
-                                    ParamType.Document,
-                                  ),
-                                }.withoutNulls,
-                                extra: <String, dynamic>{
-                                  'user': widget.userDocument,
-                                },
-                              );
+                              context.pushNamed('HomePageAllItems');
                             }
                           }
                         },

@@ -15,11 +15,9 @@ class EditGroupWidget extends StatefulWidget {
   const EditGroupWidget({
     super.key,
     required this.group,
-    required this.authUser,
   });
 
   final GroupsRecord? group;
-  final UsersRecord? authUser;
 
   @override
   State<EditGroupWidget> createState() => _EditGroupWidgetState();
@@ -370,7 +368,10 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                             Icons.groups_2,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController1Validator
                             .asValidator(context),
                       ),
@@ -422,7 +423,10 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                             Icons.groups_2,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController2Validator
                             .asValidator(context),
                       ),
@@ -477,7 +481,13 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                 filled: true,
                                 fillColor: FlutterFlowTheme.of(context).accent2,
                               ),
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
                               validator: _model.textController3Validator
                                   .asValidator(context),
                             ),
@@ -560,8 +570,9 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                             ),
                                           ),
                                         ),
-                                        if (_model.queriedUser?.image != null &&
-                                            _model.queriedUser?.image != '')
+                                        if (_model.queriedUser?.photoUrl !=
+                                                null &&
+                                            _model.queriedUser?.photoUrl != '')
                                           Padding(
                                             padding:
                                                 const EdgeInsetsDirectional.fromSTEB(
@@ -574,7 +585,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Image.network(
-                                                _model.queriedUser!.image,
+                                                _model.queriedUser!.photoUrl,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
@@ -587,7 +598,12 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                         '[Name]',
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                          ),
                                     ),
                                     InkWell(
                                       splashColor: Colors.transparent,
@@ -648,6 +664,8 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 16.0,
                                       ),
                                 ),
@@ -708,7 +726,8 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                if (usersListItem.image != '')
+                                                if (usersListItem.photoUrl !=
+                                                        '')
                                                   Container(
                                                     width: 38.0,
                                                     height: 38.0,
@@ -718,7 +737,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Image.network(
-                                                      usersListItem.image,
+                                                      usersListItem.photoUrl,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
@@ -726,9 +745,15 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                             ),
                                             Text(
                                               usersListItem.name,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                  ),
                                             ),
                                             Align(
                                               alignment: const AlignmentDirectional(
@@ -939,18 +964,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                 .delete();
                           }
 
-                          context.pushNamed(
-                            'HomePageAllItems',
-                            queryParameters: {
-                              'user': serializeParam(
-                                widget.authUser,
-                                ParamType.Document,
-                              ),
-                            }.withoutNulls,
-                            extra: <String, dynamic>{
-                              'user': widget.authUser,
-                            },
-                          );
+                          context.pushNamed('HomePageAllItems');
 
                           setState(() {});
                         },

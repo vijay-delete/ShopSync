@@ -1,5 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_ad_banner.dart';
 import '/flutter_flow/flutter_flow_count_controller.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -18,11 +20,9 @@ class AddItemPageWidget extends StatefulWidget {
   const AddItemPageWidget({
     super.key,
     required this.groupRef,
-    required this.user,
   });
 
   final DocumentReference? groupRef;
-  final DocumentReference? user;
 
   @override
   State<AddItemPageWidget> createState() => _AddItemPageWidgetState();
@@ -58,7 +58,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
       stream: queryGroupsRecord(
         queryBuilder: (groupsRecord) => groupsRecord.where(
           'Users',
-          arrayContains: widget.user,
+          arrayContains: currentUserReference,
         ),
       ),
       builder: (context, snapshot) {
@@ -337,7 +337,10 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                             Icons.shopping_cart,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController1Validator
                             .asValidator(context),
                       ),
@@ -388,7 +391,10 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                             Icons.description,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController2Validator
                             .asValidator(context),
                       ),
@@ -416,7 +422,12 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                             FlutterFlowTheme.of(context).labelMedium,
                         searchTextStyle:
                             FlutterFlowTheme.of(context).bodyMedium,
-                        textStyle: FlutterFlowTheme.of(context).bodyMedium,
+                        textStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         hintText: 'Please select a group...',
                         searchHintText: 'Search for a Group',
                         icon: Icon(
@@ -497,11 +508,13 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                             });
                           }
 
-                          await ItemsRecord.collection.doc().set({
+                          var itemsRecordReference =
+                              ItemsRecord.collection.doc();
+                          await itemsRecordReference.set({
                             ...createItemsRecordData(
                               description: _model.textController2.text,
                               itemImage: _model.itemImage,
-                              addedBy: widget.user,
+                              addedBy: currentUserReference,
                               count: _model.countControllerValue,
                               name: _model.textController1.text,
                               isBought: false,
@@ -515,6 +528,34 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                               },
                             ),
                           });
+                          _model.item = ItemsRecord.getDocumentFromData({
+                            ...createItemsRecordData(
+                              description: _model.textController2.text,
+                              itemImage: _model.itemImage,
+                              addedBy: currentUserReference,
+                              count: _model.countControllerValue,
+                              name: _model.textController1.text,
+                              isBought: false,
+                              isDicarded: false,
+                              isNew: true,
+                              group: _model.selectedGroupRef?.reference,
+                            ),
+                            ...mapToFirestore(
+                              {
+                                'DateAdded': DateTime.now(),
+                              },
+                            ),
+                          }, itemsRecordReference);
+                          triggerPushNotification(
+                            notificationTitle: 'Item Added',
+                            notificationText:
+                                'An Item has been added to group ${_model.dropDownValue}by ${currentUserDisplayName}Item name : ${_model.textController1.text}',
+                            userRefs: _model.selectedGroupRef!.users.toList(),
+                            initialPageName: 'ItemView',
+                            parameterData: {
+                              'item': _model.item,
+                            },
+                          );
 
                           context.pushNamed(
                             'HomePage',

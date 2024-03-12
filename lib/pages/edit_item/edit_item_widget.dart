@@ -1,5 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_count_controller.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -19,11 +21,9 @@ class EditItemWidget extends StatefulWidget {
   const EditItemWidget({
     super.key,
     required this.item,
-    required this.userRef,
   });
 
   final ItemsRecord? item;
-  final DocumentReference? userRef;
 
   @override
   State<EditItemWidget> createState() => _EditItemWidgetState();
@@ -69,7 +69,7 @@ class _EditItemWidgetState extends State<EditItemWidget> {
       stream: queryGroupsRecord(
         queryBuilder: (groupsRecord) => groupsRecord.where(
           'Users',
-          arrayContains: widget.userRef,
+          arrayContains: currentUserReference,
         ),
       ),
       builder: (context, snapshot) {
@@ -344,7 +344,10 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                           Icons.shopping_cart,
                         ),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
                       validator:
                           _model.textController1Validator.asValidator(context),
                     ),
@@ -395,7 +398,10 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                           Icons.description,
                         ),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
                       validator:
                           _model.textController2Validator.asValidator(context),
                     ),
@@ -421,7 +427,11 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                       searchHintTextStyle:
                           FlutterFlowTheme.of(context).labelMedium,
                       searchTextStyle: FlutterFlowTheme.of(context).bodyMedium,
-                      textStyle: FlutterFlowTheme.of(context).bodyMedium,
+                      textStyle:
+                          FlutterFlowTheme.of(context).bodyMedium.override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                       hintText: 'Please select a group...',
                       searchHintText: 'Search for a Group',
                       icon: Icon(
@@ -515,8 +525,21 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                           isDicarded: false,
                           isNew: true,
                           modifiedOn: getCurrentTimestamp,
-                          modifiedBy: widget.userRef,
+                          modifiedBy: currentUserReference,
                         ));
+                        if (widget.item?.addedBy != currentUserReference) {
+                          triggerPushNotification(
+                            notificationTitle: 'Item Updated',
+                            notificationText:
+                                'Your ShopSync item ${widget.item?.name}has been updated by $currentUserDisplayName',
+                            notificationImageUrl: widget.item?.itemImage,
+                            userRefs: [widget.item!.addedBy!],
+                            initialPageName: 'ItemView',
+                            parameterData: {
+                              'item': widget.item,
+                            },
+                          );
+                        }
 
                         context.pushNamed(
                           'HomePage',
@@ -553,7 +576,7 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                       ),
                     ),
                   ),
-                  if (widget.userRef?.id == widget.item?.addedBy?.id)
+                  if (currentUserReference == widget.item?.addedBy)
                     Padding(
                       padding:
                           const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 3.0),

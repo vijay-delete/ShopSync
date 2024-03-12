@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -10,12 +11,7 @@ import 'sign_up_page_model.dart';
 export 'sign_up_page_model.dart';
 
 class SignUpPageWidget extends StatefulWidget {
-  const SignUpPageWidget({
-    super.key,
-    required this.phoneNo,
-  });
-
-  final String? phoneNo;
+  const SignUpPageWidget({super.key});
 
   @override
   State<SignUpPageWidget> createState() => _SignUpPageWidgetState();
@@ -37,7 +33,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
     _model.textController2 ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
 
-    _model.textController3 ??= TextEditingController(text: widget.phoneNo);
+    _model.textController3 ??= TextEditingController(text: currentPhoneNumber);
     _model.textFieldFocusNode3 ??= FocusNode();
   }
 
@@ -300,7 +296,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                       Icons.phone,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                      ),
                   validator:
                       _model.textController1Validator.asValidator(context),
                 ),
@@ -351,85 +350,81 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget> {
                       Icons.mail,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                      ),
                   validator:
                       _model.textController2Validator.asValidator(context),
                 ),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                child: TextFormField(
-                  controller: _model.textController3,
-                  focusNode: _model.textFieldFocusNode3,
-                  autofocus: true,
-                  readOnly: true,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: 'Phone No. *',
-                    labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                    hintText: widget.phoneNo,
-                    hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).alternate,
-                        width: 2.0,
+                child: AuthUserStreamWidget(
+                  builder: (context) => TextFormField(
+                    controller: _model.textController3,
+                    focusNode: _model.textFieldFocusNode3,
+                    autofocus: true,
+                    readOnly: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Phone No. *',
+                      labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                      hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).alternate,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).primary,
-                        width: 2.0,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).primary,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).error,
-                        width: 2.0,
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: FlutterFlowTheme.of(context).error,
-                        width: 2.0,
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      filled: true,
+                      fillColor: FlutterFlowTheme.of(context).accent2,
+                      suffixIcon: const Icon(
+                        Icons.phone,
+                      ),
                     ),
-                    filled: true,
-                    fillColor: FlutterFlowTheme.of(context).accent2,
-                    suffixIcon: const Icon(
-                      Icons.phone,
-                    ),
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
+                    validator:
+                        _model.textController3Validator.asValidator(context),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
-                  validator:
-                      _model.textController3Validator.asValidator(context),
                 ),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 3.0),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    await UsersRecord.collection
-                        .doc()
-                        .set(createUsersRecordData(
-                          name: _model.textController1.text,
-                          email: _model.textController2.text,
-                          phoneNo: widget.phoneNo,
-                          image: _model.userImage,
-                        ));
+                    await currentUserReference!.update(createUsersRecordData(
+                      name: _model.textController1.text,
+                      email: _model.textController2.text,
+                      photoUrl: _model.userImage,
+                    ));
 
-                    context.pushNamed(
-                      'IntialGroupCreation',
-                      queryParameters: {
-                        'userPhoneNO': serializeParam(
-                          widget.phoneNo,
-                          ParamType.String,
-                        ),
-                      }.withoutNulls,
-                    );
+                    context.pushNamed('IntialGroupCreation');
                   },
                   text: 'Sign Up',
                   options: FFButtonOptions(

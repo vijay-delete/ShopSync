@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -13,11 +14,9 @@ export 'edit_profile_model.dart';
 class EditProfileWidget extends StatefulWidget {
   const EditProfileWidget({
     super.key,
-    required this.user,
     required this.selectGroupRef,
   });
 
-  final UsersRecord? user;
   final DocumentReference? selectGroupRef;
 
   @override
@@ -37,13 +36,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       setState(() {
-        _model.profileImage = widget.user?.image;
+        _model.profileImage = currentUserPhoto;
         _model.groups = [];
       });
       _model.userGroups = await queryGroupsRecordOnce(
         queryBuilder: (groupsRecord) => groupsRecord.where(
           'Users',
-          arrayContains: widget.user?.reference,
+          arrayContains: currentUserReference,
         ),
       );
       setState(() {
@@ -51,14 +50,14 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       });
     });
 
-    _model.textController1 ??= TextEditingController(text: widget.user?.name);
+    _model.textController1 ??=
+        TextEditingController(text: currentUserDisplayName);
     _model.textFieldFocusNode1 ??= FocusNode();
 
-    _model.textController2 ??=
-        TextEditingController(text: widget.user?.phoneNo);
+    _model.textController2 ??= TextEditingController(text: currentPhoneNumber);
     _model.textFieldFocusNode2 ??= FocusNode();
 
-    _model.textController3 ??= TextEditingController(text: widget.user?.email);
+    _model.textController3 ??= TextEditingController(text: currentUserEmail);
     _model.textFieldFocusNode3 ??= FocusNode();
   }
 
@@ -75,7 +74,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       stream: queryGroupsRecord(
         queryBuilder: (groupsRecord) => groupsRecord.where(
           'Users',
-          arrayContains: widget.user?.reference,
+          arrayContains: currentUserReference,
         ),
       ),
       builder: (context, snapshot) {
@@ -291,104 +290,114 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                   Padding(
                     padding:
                         const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                    child: TextFormField(
-                      controller: _model.textController1,
-                      focusNode: _model.textFieldFocusNode1,
-                      autofocus: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                        hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            width: 2.0,
+                    child: AuthUserStreamWidget(
+                      builder: (context) => TextFormField(
+                        controller: _model.textController1,
+                        focusNode: _model.textFieldFocusNode1,
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Name',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).primary,
-                            width: 2.0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
+                          filled: true,
+                          fillColor: FlutterFlowTheme.of(context).accent2,
+                          suffixIcon: const Icon(
+                            Icons.person,
+                          ),
                         ),
-                        filled: true,
-                        fillColor: FlutterFlowTheme.of(context).accent2,
-                        suffixIcon: const Icon(
-                          Icons.person,
-                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                        validator: _model.textController1Validator
+                            .asValidator(context),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
-                      validator:
-                          _model.textController1Validator.asValidator(context),
                     ),
                   ),
                   Padding(
                     padding:
                         const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                    child: TextFormField(
-                      controller: _model.textController2,
-                      focusNode: _model.textFieldFocusNode2,
-                      autofocus: true,
-                      readOnly: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Phone No.',
-                        labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                        hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            width: 2.0,
+                    child: AuthUserStreamWidget(
+                      builder: (context) => TextFormField(
+                        controller: _model.textController2,
+                        focusNode: _model.textFieldFocusNode2,
+                        autofocus: true,
+                        readOnly: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Phone No.',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).primary,
-                            width: 2.0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
+                          filled: true,
+                          fillColor: FlutterFlowTheme.of(context).accent2,
+                          suffixIcon: const Icon(
+                            Icons.phone,
+                          ),
                         ),
-                        filled: true,
-                        fillColor: FlutterFlowTheme.of(context).accent2,
-                        suffixIcon: const Icon(
-                          Icons.phone,
-                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                        validator: _model.textController2Validator
+                            .asValidator(context),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
-                      validator:
-                          _model.textController2Validator.asValidator(context),
                     ),
                   ),
                   Padding(
@@ -437,7 +446,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                           Icons.mail,
                         ),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
                       validator:
                           _model.textController3Validator.asValidator(context),
                     ),
@@ -467,6 +479,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                 .bodyMedium
                                 .override(
                                   fontFamily: 'Readex Pro',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 16.0,
                                 ),
                           ),
@@ -518,14 +532,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                             groupsListItem,
                                             ParamType.Document,
                                           ),
-                                          'userDocument': serializeParam(
-                                            widget.user,
-                                            ParamType.Document,
-                                          ),
                                         }.withoutNulls,
                                         extra: <String, dynamic>{
                                           'group': groupsListItem,
-                                          'userDocument': widget.user,
                                         },
                                       );
                                     },
@@ -566,7 +575,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                         Text(
                                           groupsListItem.name,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
                                         ),
                                         Align(
                                           alignment:
@@ -610,18 +625,17 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     child: FFButtonWidget(
                       onPressed: () async {
                         if ((_model.uploadedFileUrl != '') &&
-                            (widget.user?.image != null &&
-                                widget.user?.image != '')) {
+                            (currentUserPhoto != '')) {
                           await FirebaseStorage.instance
-                              .refFromURL(widget.user!.image)
+                              .refFromURL(currentUserPhoto)
                               .delete();
                         }
 
-                        await widget.user!.reference.update({
+                        await currentUserReference!.update({
                           ...createUsersRecordData(
                             name: _model.textController1.text,
                             email: _model.textController3.text,
-                            image: _model.profileImage,
+                            photoUrl: '',
                           ),
                           ...mapToFirestore(
                             {
@@ -639,11 +653,11 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                               ...mapToFirestore(
                                 {
                                   'Users': FieldValue.arrayRemove(
-                                      [widget.user?.reference]),
+                                      [currentUserReference]),
                                 },
                               ),
                             });
-                            if (widget.user?.reference ==
+                            if (currentUserReference ==
                                 _model.removedGroups.first.groupAdmin) {
                               await _model.removedGroups.first.reference
                                   .update(createGroupsRecordData(
@@ -671,20 +685,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         } else {
                           _model.updatedUser =
                               await UsersRecord.getDocumentOnce(
-                                  widget.user!.reference);
+                                  currentUserReference!);
 
-                          context.pushNamed(
-                            'HomePageAllItems',
-                            queryParameters: {
-                              'user': serializeParam(
-                                _model.updatedUser,
-                                ParamType.Document,
-                              ),
-                            }.withoutNulls,
-                            extra: <String, dynamic>{
-                              'user': _model.updatedUser,
-                            },
-                          );
+                          context.pushNamed('HomePageAllItems');
                         }
 
                         setState(() {});

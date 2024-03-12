@@ -10,11 +10,9 @@ class ItemViewWidget extends StatefulWidget {
   const ItemViewWidget({
     super.key,
     required this.item,
-    required this.userRef,
   });
 
   final ItemsRecord? item;
-  final DocumentReference? userRef;
 
   @override
   State<ItemViewWidget> createState() => _ItemViewWidgetState();
@@ -208,7 +206,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       Icons.shopping_cart,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                      ),
                   validator:
                       _model.textController1Validator.asValidator(context),
                 ),
@@ -259,7 +260,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       Icons.description,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                      ),
                   validator:
                       _model.textController2Validator.asValidator(context),
                 ),
@@ -310,7 +314,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       Icons.numbers_sharp,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                      ),
                   validator:
                       _model.textController3Validator.asValidator(context),
                 ),
@@ -361,7 +368,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                       Icons.date_range,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                      ),
                   validator:
                       _model.textController4Validator.asValidator(context),
                 ),
@@ -433,7 +443,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                           Icons.person,
                         ),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
                       validator:
                           _model.textController5Validator.asValidator(context),
                     );
@@ -507,7 +520,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                           Icons.groups_sharp,
                         ),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
                       validator:
                           _model.textController6Validator.asValidator(context),
                     );
@@ -695,7 +711,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                             Icons.person,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController7Validator
                             .asValidator(context),
                       );
@@ -750,7 +769,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                         Icons.date_range,
                       ),
                     ),
-                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
                     validator:
                         _model.textController8Validator.asValidator(context),
                   ),
@@ -824,7 +846,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                             Icons.person,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController9Validator
                             .asValidator(context),
                       );
@@ -879,7 +904,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                         Icons.date_range,
                       ),
                     ),
-                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
                     validator:
                         _model.textController10Validator.asValidator(context),
                   ),
@@ -953,7 +981,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                             Icons.person,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController11Validator
                             .asValidator(context),
                       );
@@ -1008,7 +1039,10 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                         Icons.date_range,
                       ),
                     ),
-                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
                     validator:
                         _model.textController12Validator.asValidator(context),
                   ),
@@ -1023,10 +1057,6 @@ class _ItemViewWidgetState extends State<ItemViewWidget> {
                         'item': serializeParam(
                           widget.item,
                           ParamType.Document,
-                        ),
-                        'userRef': serializeParam(
-                          widget.userRef,
-                          ParamType.DocumentReference,
                         ),
                       }.withoutNulls,
                       extra: <String, dynamic>{

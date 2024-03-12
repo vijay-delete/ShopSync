@@ -1,5 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -10,12 +12,7 @@ import 'intial_group_creation_model.dart';
 export 'intial_group_creation_model.dart';
 
 class IntialGroupCreationWidget extends StatefulWidget {
-  const IntialGroupCreationWidget({
-    super.key,
-    required this.userPhoneNO,
-  });
-
-  final String? userPhoneNO;
+  const IntialGroupCreationWidget({super.key});
 
   @override
   State<IntialGroupCreationWidget> createState() =>
@@ -48,14 +45,8 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<UsersRecord>>(
-      stream: queryUsersRecord(
-        queryBuilder: (usersRecord) => usersRecord.where(
-          'PhoneNo',
-          isEqualTo: widget.userPhoneNO,
-        ),
-        singleRecord: true,
-      ),
+    return StreamBuilder<UsersRecord>(
+      stream: UsersRecord.getDocument(currentUserReference!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -74,15 +65,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
             ),
           );
         }
-        List<UsersRecord> intialGroupCreationUsersRecordList = snapshot.data!;
-        // Return an empty Container when the item does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
-        final intialGroupCreationUsersRecord =
-            intialGroupCreationUsersRecordList.isNotEmpty
-                ? intialGroupCreationUsersRecordList.first
-                : null;
+        final intialGroupCreationUsersRecord = snapshot.data!;
         return GestureDetector(
           onTap: () => _model.unfocusNode.canRequestFocus
               ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -350,7 +333,10 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                             Icons.groups_2,
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         validator: _model.textController1Validator
                             .asValidator(context),
                       ),
@@ -405,7 +391,13 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                 filled: true,
                                 fillColor: FlutterFlowTheme.of(context).accent2,
                               ),
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
                               validator: _model.textController2Validator
                                   .asValidator(context),
                             ),
@@ -491,9 +483,10 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                               ),
                                             ),
                                           ),
-                                          if (_model.queriedUser?.image !=
+                                          if (_model.queriedUser?.photoUrl !=
                                                   null &&
-                                              _model.queriedUser?.image != '')
+                                              _model.queriedUser?.photoUrl !=
+                                                  '')
                                             Padding(
                                               padding: const EdgeInsetsDirectional
                                                   .fromSTEB(0.0, 2.0, 0.0, 2.0),
@@ -505,7 +498,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                                   shape: BoxShape.circle,
                                                 ),
                                                 child: Image.network(
-                                                  _model.queriedUser!.image,
+                                                  _model.queriedUser!.photoUrl,
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -518,7 +511,13 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                           '[Name]',
                                         ),
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
                                       ),
                                       InkWell(
                                         splashColor: Colors.transparent,
@@ -576,6 +575,8 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 16.0,
                                       ),
                                 ),
@@ -636,7 +637,8 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                if (usersListItem.image != '')
+                                                if (usersListItem.photoUrl !=
+                                                        '')
                                                   Container(
                                                     width: 38.0,
                                                     height: 38.0,
@@ -646,7 +648,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Image.network(
-                                                      usersListItem.image,
+                                                      usersListItem.photoUrl,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   ),
@@ -654,9 +656,15 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                             ),
                                             Text(
                                               usersListItem.name,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    fontFamily: 'Readex Pro',
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                  ),
                                             ),
                                             Align(
                                               alignment: const AlignmentDirectional(
@@ -700,7 +708,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                       child: FFButtonWidget(
                         onPressed: () async {
                           setState(() {
-                            _model.addToUsers(intialGroupCreationUsersRecord!);
+                            _model.addToUsers(intialGroupCreationUsersRecord);
                           });
                           if (_model.uploadedFileUrl != '') {
                             setState(() {
@@ -714,8 +722,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                             ...createGroupsRecordData(
                               name: _model.textController1.text,
                               image: _model.groupImage,
-                              groupAdmin:
-                                  intialGroupCreationUsersRecord?.reference,
+                              groupAdmin: currentUserReference,
                             ),
                             ...mapToFirestore(
                               {
@@ -729,8 +736,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                             ...createGroupsRecordData(
                               name: _model.textController1.text,
                               image: _model.groupImage,
-                              groupAdmin:
-                                  intialGroupCreationUsersRecord?.reference,
+                              groupAdmin: currentUserReference,
                             ),
                             ...mapToFirestore(
                               {
@@ -740,6 +746,18 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                               },
                             ),
                           }, groupsRecordReference);
+                          triggerPushNotification(
+                            notificationTitle: 'New ShopSync Group',
+                            notificationText:
+                                'You have been added to a new group ${_model.group?.name}by $currentUserDisplayName',
+                            notificationImageUrl: _model.group?.image,
+                            userRefs:
+                                _model.users.map((e) => e.reference).toList(),
+                            initialPageName: 'GroupView',
+                            parameterData: {
+                              'group': _model.group,
+                            },
+                          );
                           while (_model.users.isNotEmpty) {
                             await _model.users.first.reference.update({
                               ...mapToFirestore(
@@ -799,8 +817,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Readex Pro',
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            color: FlutterFlowTheme.of(context).primaryText,
                           ),
                     ),
                     Padding(
@@ -808,18 +825,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                           const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 3.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pushNamed(
-                            'JoinGroup',
-                            queryParameters: {
-                              'userDocument': serializeParam(
-                                intialGroupCreationUsersRecord,
-                                ParamType.Document,
-                              ),
-                            }.withoutNulls,
-                            extra: <String, dynamic>{
-                              'userDocument': intialGroupCreationUsersRecord,
-                            },
-                          );
+                          context.pushNamed('JoinGroup');
                         },
                         text: 'Join Group',
                         options: FFButtonOptions(

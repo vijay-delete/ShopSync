@@ -32,6 +32,8 @@ class AddItemPageModel extends FlutterFlowModel<AddItemPageWidget> {
   int? countControllerValue;
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   GroupsRecord? selectedGroupRef;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  ItemsRecord? item;
 
   /// Initialization and disposal methods.
 

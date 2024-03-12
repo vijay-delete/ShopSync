@@ -1,4 +1,6 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -9,12 +11,7 @@ import 'join_group_model.dart';
 export 'join_group_model.dart';
 
 class JoinGroupWidget extends StatefulWidget {
-  const JoinGroupWidget({
-    super.key,
-    required this.userDocument,
-  });
-
-  final UsersRecord? userDocument;
+  const JoinGroupWidget({super.key});
 
   @override
   State<JoinGroupWidget> createState() => _JoinGroupWidgetState();
@@ -97,7 +94,12 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                 FlutterFlowTheme.of(context).labelMedium,
                             alignLabelWithHint: false,
                             hintText: 'Enter Group Code',
-                            hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  color: FlutterFlowTheme.of(context).info,
+                                ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).alternate,
@@ -132,7 +134,11 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                               Icons.groups_2,
                             ),
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context).info,
+                                  ),
                           validator: _model.textController1Validator
                               .asValidator(context),
                         ),
@@ -296,7 +302,13 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                   Icons.groups_2,
                                 ),
                               ),
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
                               validator: _model.textController2Validator
                                   .asValidator(context),
                             ),
@@ -354,7 +366,13 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                   Icons.groups_2,
                                 ),
                               ),
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
                               validator: _model.textController3Validator
                                   .asValidator(context),
                             ),
@@ -434,7 +452,12 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                               Icons.person,
                             ),
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                           validator: _model.textController4Validator
                               .asValidator(context),
                         );
@@ -473,6 +496,8 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 16.0,
                                       ),
                                 ),
@@ -536,7 +561,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
-                                              if (usersListItem.image != '')
+                                              if (usersListItem.photoUrl != '')
                                                 Container(
                                                   width: 38.0,
                                                   height: 38.0,
@@ -545,7 +570,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                                     shape: BoxShape.circle,
                                                   ),
                                                   child: Image.network(
-                                                    usersListItem.image,
+                                                    usersListItem.photoUrl,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -554,7 +579,13 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                           Text(
                                             usersListItem.name,
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Readex Pro',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -574,7 +605,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                         const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 3.0),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        await widget.userDocument!.reference.update({
+                        await currentUserReference!.update({
                           ...mapToFirestore(
                             {
                               'Groups': FieldValue.arrayUnion(
@@ -586,11 +617,22 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                         await _model.group!.reference.update({
                           ...mapToFirestore(
                             {
-                              'Users': FieldValue.arrayUnion(
-                                  [widget.userDocument?.reference]),
+                              'Users':
+                                  FieldValue.arrayUnion([currentUserReference]),
                             },
                           ),
                         });
+                        triggerPushNotification(
+                          notificationTitle: 'New Member in Group',
+                          notificationText:
+                              '${currentUserDisplayName}joined group ${_model.group?.name}',
+                          userRefs:
+                              _model.users!.map((e) => e.reference).toList(),
+                          initialPageName: 'GroupView',
+                          parameterData: {
+                            'group': _model.group,
+                          },
+                        );
 
                         context.pushNamed(
                           'HomePage',

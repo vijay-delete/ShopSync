@@ -114,7 +114,12 @@ class _OtpPageWidgetState extends State<OtpPageWidget> {
                       decoration: InputDecoration(
                         labelStyle: FlutterFlowTheme.of(context).labelMedium,
                         hintText: widget.phoneNo,
-                        hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                        hintStyle: FlutterFlowTheme.of(context)
+                            .labelMedium
+                            .override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: FlutterFlowTheme.of(context).alternate,
@@ -164,7 +169,11 @@ class _OtpPageWidgetState extends State<OtpPageWidget> {
                       autoDisposeControllers: false,
                       appContext: context,
                       length: 6,
-                      textStyle: FlutterFlowTheme.of(context).bodyLarge,
+                      textStyle:
+                          FlutterFlowTheme.of(context).bodyLarge.override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       enableActiveFill: true,
                       autoFocus: true,
@@ -239,27 +248,10 @@ class _OtpPageWidgetState extends State<OtpPageWidget> {
                             );
                           } else {
                             context.pushNamedAuth(
-                              'IntialGroupCreation',
-                              context.mounted,
-                              queryParameters: {
-                                'userPhoneNO': serializeParam(
-                                  widget.phoneNo,
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls,
-                            );
+                                'IntialGroupCreation', context.mounted);
                           }
                         } else {
-                          context.pushNamedAuth(
-                            'SignUpPage',
-                            context.mounted,
-                            queryParameters: {
-                              'phoneNo': serializeParam(
-                                widget.phoneNo,
-                                ParamType.String,
-                              ),
-                            }.withoutNulls,
-                          );
+                          context.pushNamedAuth('SignUpPage', context.mounted);
                         }
                       },
                       text: 'Verify',

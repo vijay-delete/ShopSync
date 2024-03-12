@@ -11,12 +11,7 @@ import 'home_page_all_items_model.dart';
 export 'home_page_all_items_model.dart';
 
 class HomePageAllItemsWidget extends StatefulWidget {
-  const HomePageAllItemsWidget({
-    super.key,
-    required this.user,
-  });
-
-  final UsersRecord? user;
+  const HomePageAllItemsWidget({super.key});
 
   @override
   State<HomePageAllItemsWidget> createState() => _HomePageAllItemsWidgetState();
@@ -53,7 +48,7 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
       stream: queryGroupsRecord(
         queryBuilder: (groupsRecord) => groupsRecord.where(
           'Users',
-          arrayContains: widget.user?.reference,
+          arrayContains: currentUserReference,
         ),
       ),
       builder: (context, snapshot) {
@@ -87,12 +82,8 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                 context.pushNamed(
                   'AddItemPage',
                   queryParameters: {
-                    'user': serializeParam(
-                      widget.user?.reference,
-                      ParamType.DocumentReference,
-                    ),
                     'groupRef': serializeParam(
-                      widget.user?.groups.first,
+                      (currentUserDocument?.groups.toList() ?? []).first,
                       ParamType.DocumentReference,
                     ),
                   }.withoutNulls,
@@ -110,7 +101,7 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
               stream: queryGroupsRecord(
                 queryBuilder: (groupsRecord) => groupsRecord.where(
                   'Users',
-                  arrayContains: widget.user?.reference,
+                  arrayContains: currentUserReference,
                 ),
               ),
               builder: (context, snapshot) {
@@ -162,18 +153,7 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  context.pushNamed(
-                                    'ProfileView',
-                                    queryParameters: {
-                                      'user': serializeParam(
-                                        widget.user,
-                                        ParamType.Document,
-                                      ),
-                                    }.withoutNulls,
-                                    extra: <String, dynamic>{
-                                      'user': widget.user,
-                                    },
-                                  );
+                                  context.pushNamed('ProfileView');
                                 },
                                 child: Container(
                                   width: 200.0,
@@ -210,22 +190,23 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                               ),
                                             ),
                                           ),
-                                          if (widget.user?.image != null &&
-                                              widget.user?.image != '')
+                                          if (currentUserPhoto != '')
                                             Padding(
                                               padding: const EdgeInsetsDirectional
                                                   .fromSTEB(
                                                       5.0, 0.0, 10.0, 0.0),
-                                              child: Container(
-                                                width: 80.0,
-                                                height: 80.0,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image.network(
-                                                  widget.user!.image,
-                                                  fit: BoxFit.cover,
+                                              child: AuthUserStreamWidget(
+                                                builder: (context) => Container(
+                                                  width: 80.0,
+                                                  height: 80.0,
+                                                  clipBehavior: Clip.antiAlias,
+                                                  decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Image.network(
+                                                    currentUserPhoto,
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -236,13 +217,13 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                           padding:
                                               const EdgeInsetsDirectional.fromSTEB(
                                                   5.0, 0.0, 0.0, 0.0),
-                                          child: Text(
-                                            valueOrDefault<String>(
-                                              widget.user?.name,
-                                              '[Name]',
+                                          child: AuthUserStreamWidget(
+                                            builder: (context) => Text(
+                                              currentUserDisplayName,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
                                           ),
                                         ),
                                       ),
@@ -288,18 +269,7 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            context.pushNamed(
-                                              'AddGroup',
-                                              queryParameters: {
-                                                'authUser': serializeParam(
-                                                  widget.user,
-                                                  ParamType.Document,
-                                                ),
-                                              }.withoutNulls,
-                                              extra: <String, dynamic>{
-                                                'authUser': widget.user,
-                                              },
-                                            );
+                                            context.pushNamed('AddGroup');
                                           },
                                           child: Icon(
                                             Icons.add,
@@ -488,6 +458,34 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                       ),
                     ],
                   ),
+                  Align(
+                    alignment: const AlignmentDirectional(0.0, 0.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondary,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(0.0),
+                          bottomRight: Radius.circular(0.0),
+                          topLeft: Radius.circular(0.0),
+                          topRight: Radius.circular(0.0),
+                        ),
+                        shape: BoxShape.rectangle,
+                      ),
+                      child: Align(
+                        alignment: const AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          'All Items',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 16.0,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Divider(
                     thickness: 3.0,
                     color: FlutterFlowTheme.of(context).secondary,
@@ -591,11 +589,6 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                       listViewItemsRecord,
                                                       ParamType.Document,
                                                     ),
-                                                    'userRef': serializeParam(
-                                                      widget.user?.reference,
-                                                      ParamType
-                                                          .DocumentReference,
-                                                    ),
                                                   }.withoutNulls,
                                                   extra: <String, dynamic>{
                                                     'item': listViewItemsRecord,
@@ -685,8 +678,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
-                                                                  fontSize:
-                                                                      16.0,
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
                                                                 ),
                                                           ),
                                                           AutoSizeText(
@@ -705,6 +699,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal,
@@ -718,7 +715,14 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                     .dateAdded!),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyMedium,
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
                                                           ),
                                                         ].divide(const SizedBox(
                                                             height: 6.0)),
@@ -734,7 +738,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
-                                                                fontSize: 20.0,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
                                                               ),
                                                     ),
                                                     Padding(
@@ -770,9 +776,8 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 isNew: false,
                                                                 boughtOn:
                                                                     getCurrentTimestamp,
-                                                                boughtBy: widget
-                                                                    .user
-                                                                    ?.reference,
+                                                                boughtBy:
+                                                                    currentUserReference,
                                                               ));
                                                             },
                                                             child: Column(
@@ -823,9 +828,8 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 isDicarded:
                                                                     true,
                                                                 isNew: false,
-                                                                discardedBy: widget
-                                                                    .user
-                                                                    ?.reference,
+                                                                discardedBy:
+                                                                    currentUserReference,
                                                                 discardedOn:
                                                                     getCurrentTimestamp,
                                                               ));
@@ -934,11 +938,6 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                       listViewItemsRecord,
                                                       ParamType.Document,
                                                     ),
-                                                    'userRef': serializeParam(
-                                                      widget.user?.reference,
-                                                      ParamType
-                                                          .DocumentReference,
-                                                    ),
                                                   }.withoutNulls,
                                                   extra: <String, dynamic>{
                                                     'item': listViewItemsRecord,
@@ -1028,6 +1027,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
                                                                   fontSize:
                                                                       16.0,
                                                                 ),
@@ -1048,6 +1050,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal,
@@ -1061,7 +1066,14 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                     .dateAdded!),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyMedium,
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
                                                           ),
                                                         ].divide(const SizedBox(
                                                             height: 6.0)),
@@ -1077,6 +1089,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
                                                                 fontSize: 20.0,
                                                               ),
                                                     ),
@@ -1180,9 +1195,8 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 isDicarded:
                                                                     true,
                                                                 isNew: false,
-                                                                discardedBy: widget
-                                                                    .user
-                                                                    ?.reference,
+                                                                discardedBy:
+                                                                    currentUserReference,
                                                                 discardedOn:
                                                                     getCurrentTimestamp,
                                                               ));
@@ -1291,11 +1305,6 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                       listViewItemsRecord,
                                                       ParamType.Document,
                                                     ),
-                                                    'userRef': serializeParam(
-                                                      widget.user?.reference,
-                                                      ParamType
-                                                          .DocumentReference,
-                                                    ),
                                                   }.withoutNulls,
                                                   extra: <String, dynamic>{
                                                     'item': listViewItemsRecord,
@@ -1385,6 +1394,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
                                                                   fontSize:
                                                                       16.0,
                                                                 ),
@@ -1405,6 +1417,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                 .override(
                                                                   fontFamily:
                                                                       'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal,
@@ -1418,7 +1433,14 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                                     .dateAdded!),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
-                                                                .bodyMedium,
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                ),
                                                           ),
                                                         ].divide(const SizedBox(
                                                             height: 6.0)),
@@ -1434,6 +1456,9 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
                                                                 fontSize: 20.0,
                                                               ),
                                                     ),
@@ -1531,8 +1556,7 @@ class _HomePageAllItemsWidgetState extends State<HomePageAllItemsWidget>
                                                             onTap: () async {
                                                               if (listViewItemsRecord
                                                                       .addedBy ==
-                                                                  widget.user
-                                                                      ?.reference) {
+                                                                  currentUserReference) {
                                                                 if (listViewItemsRecord
                                                                             .itemImage !=
                                                                         '') {

@@ -1,5 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_ad_banner.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -11,12 +13,7 @@ import 'add_group_model.dart';
 export 'add_group_model.dart';
 
 class AddGroupWidget extends StatefulWidget {
-  const AddGroupWidget({
-    super.key,
-    required this.authUser,
-  });
-
-  final UsersRecord? authUser;
+  const AddGroupWidget({super.key});
 
   @override
   State<AddGroupWidget> createState() => _AddGroupWidgetState();
@@ -60,7 +57,8 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Align(
                   alignment: const AlignmentDirectional(0.0, 0.0),
@@ -291,7 +289,10 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                         Icons.groups_2,
                       ),
                     ),
-                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
                     validator:
                         _model.textController1Validator.asValidator(context),
                   ),
@@ -344,7 +345,12 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                             filled: true,
                             fillColor: FlutterFlowTheme.of(context).accent2,
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                           validator: _model.textController2Validator
                               .asValidator(context),
                         ),
@@ -423,8 +429,8 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                         ),
                                       ),
                                     ),
-                                    if (_model.queriedUser?.image != null &&
-                                        _model.queriedUser?.image != '')
+                                    if (_model.queriedUser?.photoUrl != null &&
+                                        _model.queriedUser?.photoUrl != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(
                                             0.0, 2.0, 0.0, 2.0),
@@ -436,7 +442,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                             shape: BoxShape.circle,
                                           ),
                                           child: Image.network(
-                                            _model.queriedUser!.image,
+                                            _model.queriedUser!.photoUrl,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -448,8 +454,13 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                     _model.queriedUser?.name,
                                     '[Name]',
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
                                 ),
                                 InkWell(
                                   splashColor: Colors.transparent,
@@ -504,6 +515,8 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     fontSize: 16.0,
                                   ),
                             ),
@@ -564,7 +577,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
-                                            if (usersListItem.image != '')
+                                            if (usersListItem.photoUrl != '')
                                               Container(
                                                 width: 38.0,
                                                 height: 38.0,
@@ -573,7 +586,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                                   shape: BoxShape.circle,
                                                 ),
                                                 child: Image.network(
-                                                  usersListItem.image,
+                                                  usersListItem.photoUrl,
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -582,7 +595,13 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                                         Text(
                                           usersListItem.name,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
                                         ),
                                         Align(
                                           alignment:
@@ -623,8 +642,10 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 3.0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      _model.authUser = await UsersRecord.getDocumentOnce(
+                          currentUserReference!);
                       setState(() {
-                        _model.addToUsers(widget.authUser!);
+                        _model.addToUsers(_model.authUser!);
                       });
                       if (_model.uploadedFileUrl != '') {
                         setState(() {
@@ -637,7 +658,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                         ...createGroupsRecordData(
                           name: _model.textController1.text,
                           image: _model.groupImage,
-                          groupAdmin: widget.authUser?.reference,
+                          groupAdmin: currentUserReference,
                         ),
                         ...mapToFirestore(
                           {
@@ -650,7 +671,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                         ...createGroupsRecordData(
                           name: _model.textController1.text,
                           image: _model.groupImage,
-                          groupAdmin: widget.authUser?.reference,
+                          groupAdmin: currentUserReference,
                         ),
                         ...mapToFirestore(
                           {
@@ -659,6 +680,17 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                           },
                         ),
                       }, groupsRecordReference);
+                      triggerPushNotification(
+                        notificationTitle: 'New ShopSync Group',
+                        notificationText:
+                            'You have been added to group ${_model.textController1.text}Created by$currentUserDisplayName',
+                        notificationImageUrl: _model.groupImage,
+                        userRefs: _model.users.map((e) => e.reference).toList(),
+                        initialPageName: 'GroupView',
+                        parameterData: {
+                          'group': _model.group,
+                        },
+                      );
                       while (_model.users.isNotEmpty) {
                         await _model.users.first.reference.update({
                           ...mapToFirestore(
@@ -726,18 +758,7 @@ class _AddGroupWidgetState extends State<AddGroupWidget> {
                       const EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 50.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      context.pushNamed(
-                        'JoinGroup',
-                        queryParameters: {
-                          'userDocument': serializeParam(
-                            widget.authUser,
-                            ParamType.Document,
-                          ),
-                        }.withoutNulls,
-                        extra: <String, dynamic>{
-                          'userDocument': widget.authUser,
-                        },
-                      );
+                      context.pushNamed('JoinGroup');
                     },
                     text: 'Join Group',
                     options: FFButtonOptions(

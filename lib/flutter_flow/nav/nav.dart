@@ -6,6 +6,8 @@ import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/backend/push_notifications/push_notifications_handler.dart'
+    show PushNotificationsHandler;
 import '/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -85,9 +87,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'SignUpPage',
           path: '/signUpPage',
           requireAuth: true,
-          builder: (context, params) => SignUpPageWidget(
-            phoneNo: params.getParam('phoneNo', ParamType.String),
-          ),
+          builder: (context, params) => const SignUpPageWidget(),
         ),
         FFRoute(
           name: 'EntryPage',
@@ -108,20 +108,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => AddItemPageWidget(
             groupRef: params.getParam(
                 'groupRef', ParamType.DocumentReference, false, ['Groups']),
-            user: params.getParam(
-                'user', ParamType.DocumentReference, false, ['Users']),
           ),
         ),
         FFRoute(
           name: 'AddGroup',
           path: '/addGroup',
           requireAuth: true,
-          asyncParams: {
-            'authUser': getDoc(['Users'], UsersRecord.fromSnapshot),
-          },
-          builder: (context, params) => AddGroupWidget(
-            authUser: params.getParam('authUser', ParamType.Document),
-          ),
+          builder: (context, params) => const AddGroupWidget(),
         ),
         FFRoute(
           name: 'HomePage',
@@ -140,8 +133,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           },
           builder: (context, params) => EditItemWidget(
             item: params.getParam('item', ParamType.Document),
-            userRef: params.getParam(
-                'userRef', ParamType.DocumentReference, false, ['Users']),
           ),
         ),
         FFRoute(
@@ -153,17 +144,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           },
           builder: (context, params) => ItemViewWidget(
             item: params.getParam('item', ParamType.Document),
-            userRef: params.getParam(
-                'userRef', ParamType.DocumentReference, false, ['Users']),
           ),
         ),
         FFRoute(
           name: 'IntialGroupCreation',
           path: '/intialGroupCreation',
           requireAuth: true,
-          builder: (context, params) => IntialGroupCreationWidget(
-            userPhoneNO: params.getParam('userPhoneNO', ParamType.String),
-          ),
+          builder: (context, params) => const IntialGroupCreationWidget(),
         ),
         FFRoute(
           name: 'EditGroup',
@@ -171,22 +158,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           requireAuth: true,
           asyncParams: {
             'group': getDoc(['Groups'], GroupsRecord.fromSnapshot),
-            'authUser': getDoc(['Users'], UsersRecord.fromSnapshot),
           },
           builder: (context, params) => EditGroupWidget(
             group: params.getParam('group', ParamType.Document),
-            authUser: params.getParam('authUser', ParamType.Document),
           ),
         ),
         FFRoute(
           name: 'HomePageAllItems',
           path: '/homePageAllItems',
-          asyncParams: {
-            'user': getDoc(['Users'], UsersRecord.fromSnapshot),
-          },
-          builder: (context, params) => HomePageAllItemsWidget(
-            user: params.getParam('user', ParamType.Document),
-          ),
+          builder: (context, params) => const HomePageAllItemsWidget(),
         ),
         FFRoute(
           name: 'GroupView',
@@ -194,33 +174,22 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           requireAuth: true,
           asyncParams: {
             'group': getDoc(['Groups'], GroupsRecord.fromSnapshot),
-            'userDocument': getDoc(['Users'], UsersRecord.fromSnapshot),
           },
           builder: (context, params) => GroupViewWidget(
             group: params.getParam('group', ParamType.Document),
-            userDocument: params.getParam('userDocument', ParamType.Document),
           ),
         ),
         FFRoute(
           name: 'JoinGroup',
           path: '/joinGroup',
           requireAuth: true,
-          asyncParams: {
-            'userDocument': getDoc(['Users'], UsersRecord.fromSnapshot),
-          },
-          builder: (context, params) => JoinGroupWidget(
-            userDocument: params.getParam('userDocument', ParamType.Document),
-          ),
+          builder: (context, params) => const JoinGroupWidget(),
         ),
         FFRoute(
           name: 'ProfileView',
           path: '/profileView',
           requireAuth: true,
-          asyncParams: {
-            'user': getDoc(['Users'], UsersRecord.fromSnapshot),
-          },
           builder: (context, params) => ProfileViewWidget(
-            user: params.getParam('user', ParamType.Document),
             selectedGroupRef: params.getParam('selectedGroupRef',
                 ParamType.DocumentReference, false, ['Groups']),
           ),
@@ -229,19 +198,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'EditProfile',
           path: '/editProfile',
           requireAuth: true,
-          asyncParams: {
-            'user': getDoc(['Users'], UsersRecord.fromSnapshot),
-          },
           builder: (context, params) => EditProfileWidget(
-            user: params.getParam('user', ParamType.Document),
             selectGroupRef: params.getParam('selectGroupRef',
                 ParamType.DocumentReference, false, ['Groups']),
           ),
-        ),
-        FFRoute(
-          name: 'testcontactselection',
-          path: '/testcontactselection',
-          builder: (context, params) => const TestcontactselectionWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -429,7 +389,7 @@ class FFRoute {
                     fit: BoxFit.contain,
                   ),
                 )
-              : page;
+              : PushNotificationsHandler(child: page);
 
           final transitionInfo = state.transitionInfo;
           return transitionInfo.hasTransition

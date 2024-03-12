@@ -35,6 +35,8 @@ class AddGroupModel extends FlutterFlowModel<AddGroupWidget> {
   String? Function(BuildContext, String?)? textController2Validator;
   // Stores action output result for [Firestore Query - Query a collection] action in Icon widget.
   UsersRecord? queriedUser;
+  // Stores action output result for [Backend Call - Read Document] action in Button widget.
+  UsersRecord? authUser;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
   GroupsRecord? group;
 
