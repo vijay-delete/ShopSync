@@ -534,6 +534,8 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                                 final usersList = _model.users?.toList() ?? [];
                                 return ListView.separated(
                                   padding: EdgeInsets.zero,
+                                  primary: false,
+                                  shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: usersList.length,
                                   separatorBuilder: (_, __) =>
@@ -627,7 +629,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                         triggerPushNotification(
                           notificationTitle: 'New Member in Group',
                           notificationText:
-                              '${currentUserDisplayName}joined group ${_model.group?.name}',
+                              '$currentUserDisplayName joined group ${_model.group?.name}',
                           userRefs:
                               _model.users!.map((e) => e.reference).toList(),
                           initialPageName: 'GroupView',
@@ -669,7 +671,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                       ),
                     ),
                   ),
-              ],
+              ].addToEnd(const SizedBox(height: 50.0)),
             ),
           ),
         ),

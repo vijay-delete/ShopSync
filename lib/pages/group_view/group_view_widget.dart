@@ -440,6 +440,8 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                                       groupViewUsersRecordList.toList();
                                   return ListView.separated(
                                     padding: EdgeInsets.zero,
+                                    primary: false,
+                                    shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
                                     itemCount: usersList.length,
                                     separatorBuilder: (_, __) =>
@@ -658,7 +660,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                         ),
                       ),
                     ),
-                  ],
+                  ].addToEnd(const SizedBox(height: 50.0)),
                 ),
               ),
             ),

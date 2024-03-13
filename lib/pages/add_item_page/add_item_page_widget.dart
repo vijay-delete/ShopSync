@@ -407,13 +407,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                           const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
                       child: FlutterFlowDropDown<String>(
                         controller: _model.dropDownValueController ??=
-                            FormFieldController<String>(
-                          _model.dropDownValue ??= addItemPageGroupsRecordList
-                              .where((e) => widget.groupRef == e.reference)
-                              .toList()
-                              .first
-                              .name,
-                        ),
+                            FormFieldController<String>(null),
                         options: addItemPageGroupsRecordList
                             .map((e) => e.name)
                             .toList(),
@@ -431,7 +425,11 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                               fontFamily: 'Readex Pro',
                               color: FlutterFlowTheme.of(context).primaryText,
                             ),
-                        hintText: 'Please select a group...',
+                        hintText: addItemPageGroupsRecordList
+                            .where((e) => widget.groupRef == e.reference)
+                            .toList()
+                            .first
+                            .name,
                         searchHintText: 'Search for a Group',
                         icon: Icon(
                           Icons.keyboard_arrow_down_rounded,
@@ -552,7 +550,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                           triggerPushNotification(
                             notificationTitle: 'Item Added',
                             notificationText:
-                                'An Item has been added to group ${_model.dropDownValue}by ${currentUserDisplayName}Item name : ${_model.textController1.text}',
+                                'An Item has been added to group ${_model.dropDownValue} by $currentUserDisplayName Item name : ${_model.textController1.text}',
                             userRefs: _model.selectedGroupRef!.users.toList(),
                             initialPageName: 'ItemView',
                             parameterData: {
@@ -595,10 +593,15 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                         ),
                       ),
                     ),
-                    const FlutterFlowAdBanner(
-                      height: 50.0,
-                      showsTestAd: true,
-                      androidAdUnitID: 'ca-app-pub-9120942427839383/6415981878',
+                    const Align(
+                      alignment: AlignmentDirectional(0.0, 1.0),
+                      child: FlutterFlowAdBanner(
+                        width: double.infinity,
+                        height: 50.0,
+                        showsTestAd: true,
+                        androidAdUnitID:
+                            'ca-app-pub-9120942427839383/6415981878',
+                      ),
                     ),
                   ],
                 ),

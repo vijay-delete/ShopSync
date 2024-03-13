@@ -100,164 +100,151 @@ class _EditItemWidgetState extends State<EditItemWidget> {
             backgroundColor: FlutterFlowTheme.of(context).info,
             body: SafeArea(
               top: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: const AlignmentDirectional(0.0, -1.0),
-                    child: Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          'assets/images/ShopSyncLogo.png',
-                          width: 200.0,
-                          height: 200.0,
-                          fit: BoxFit.cover,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: const AlignmentDirectional(0.0, -1.0),
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
+                            'assets/images/ShopSyncLogo.png',
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Stack(
-                    children: [
-                      Align(
-                        alignment: const AlignmentDirectional(0.0, 0.0),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              final selectedMedia =
-                                  await selectMediaWithSourceBottomSheet(
-                                context: context,
-                                imageQuality: 10,
-                                allowPhoto: true,
-                              );
-                              if (selectedMedia != null &&
-                                  selectedMedia.every((m) => validateFileFormat(
-                                      m.storagePath, context))) {
-                                setState(() => _model.isDataUploading = true);
-                                var selectedUploadedFiles = <FFUploadedFile>[];
+                    Stack(
+                      children: [
+                        Align(
+                          alignment: const AlignmentDirectional(0.0, 0.0),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 10.0),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                final selectedMedia =
+                                    await selectMediaWithSourceBottomSheet(
+                                  context: context,
+                                  imageQuality: 10,
+                                  allowPhoto: true,
+                                );
+                                if (selectedMedia != null &&
+                                    selectedMedia.every((m) =>
+                                        validateFileFormat(
+                                            m.storagePath, context))) {
+                                  setState(() => _model.isDataUploading = true);
+                                  var selectedUploadedFiles =
+                                      <FFUploadedFile>[];
 
-                                var downloadUrls = <String>[];
-                                try {
-                                  showUploadMessage(
-                                    context,
-                                    'Uploading file...',
-                                    showLoading: true,
-                                  );
-                                  selectedUploadedFiles = selectedMedia
-                                      .map((m) => FFUploadedFile(
-                                            name: m.storagePath.split('/').last,
-                                            bytes: m.bytes,
-                                            height: m.dimensions?.height,
-                                            width: m.dimensions?.width,
-                                            blurHash: m.blurHash,
-                                          ))
-                                      .toList();
+                                  var downloadUrls = <String>[];
+                                  try {
+                                    showUploadMessage(
+                                      context,
+                                      'Uploading file...',
+                                      showLoading: true,
+                                    );
+                                    selectedUploadedFiles = selectedMedia
+                                        .map((m) => FFUploadedFile(
+                                              name:
+                                                  m.storagePath.split('/').last,
+                                              bytes: m.bytes,
+                                              height: m.dimensions?.height,
+                                              width: m.dimensions?.width,
+                                              blurHash: m.blurHash,
+                                            ))
+                                        .toList();
 
-                                  downloadUrls = (await Future.wait(
-                                    selectedMedia.map(
-                                      (m) async => await uploadData(
-                                          m.storagePath, m.bytes),
-                                    ),
-                                  ))
-                                      .where((u) => u != null)
-                                      .map((u) => u!)
-                                      .toList();
-                                } finally {
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  _model.isDataUploading = false;
-                                }
-                                if (selectedUploadedFiles.length ==
-                                        selectedMedia.length &&
-                                    downloadUrls.length ==
-                                        selectedMedia.length) {
-                                  setState(() {
-                                    _model.uploadedLocalFile =
-                                        selectedUploadedFiles.first;
-                                    _model.uploadedFileUrl = downloadUrls.first;
-                                  });
-                                  showUploadMessage(context, 'Success!');
-                                } else {
-                                  setState(() {});
-                                  showUploadMessage(
-                                      context, 'Failed to upload data');
-                                  return;
-                                }
-                              }
-
-                              if (_model.uploadedFileUrl != '') {
-                                setState(() {
-                                  _model.itemImage = _model.uploadedFileUrl;
-                                });
-                              }
-                            },
-                            child: Material(
-                              color: Colors.transparent,
-                              elevation: 0.0,
-                              shape: const CircleBorder(),
-                              child: Container(
-                                width: 110.0,
-                                height: 110.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                  ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      width: 110.0,
-                                      height: 110.0,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.rectangle,
+                                    downloadUrls = (await Future.wait(
+                                      selectedMedia.map(
+                                        (m) async => await uploadData(
+                                            m.storagePath, m.bytes),
                                       ),
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment:
-                                                const AlignmentDirectional(0.0, 0.0),
-                                            child: Container(
-                                              width: 110.0,
-                                              height: 110.0,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Image.asset(
-                                                'assets/images/ShopSyncRing.png',
-                                                fit: BoxFit.cover,
+                                    ))
+                                        .where((u) => u != null)
+                                        .map((u) => u!)
+                                        .toList();
+                                  } finally {
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                    _model.isDataUploading = false;
+                                  }
+                                  if (selectedUploadedFiles.length ==
+                                          selectedMedia.length &&
+                                      downloadUrls.length ==
+                                          selectedMedia.length) {
+                                    setState(() {
+                                      _model.uploadedLocalFile =
+                                          selectedUploadedFiles.first;
+                                      _model.uploadedFileUrl =
+                                          downloadUrls.first;
+                                    });
+                                    showUploadMessage(context, 'Success!');
+                                  } else {
+                                    setState(() {});
+                                    showUploadMessage(
+                                        context, 'Failed to upload data');
+                                    return;
+                                  }
+                                }
+
+                                if (_model.uploadedFileUrl != '') {
+                                  setState(() {
+                                    _model.itemImage = _model.uploadedFileUrl;
+                                  });
+                                }
+                              },
+                              child: Material(
+                                color: Colors.transparent,
+                                elevation: 0.0,
+                                shape: const CircleBorder(),
+                                child: Container(
+                                  width: 110.0,
+                                  height: 110.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        width: 110.0,
+                                        height: 110.0,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Align(
+                                              alignment: const AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: Container(
+                                                width: 110.0,
+                                                height: 110.0,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.asset(
+                                                  'assets/images/ShopSyncRing.png',
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Align(
-                                            alignment:
-                                                const AlignmentDirectional(0.0, 0.0),
-                                            child: Container(
-                                              width: 100.0,
-                                              height: 100.0,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Image.asset(
-                                                'assets/images/ItemIcon.png',
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                          if (_model.itemImage != null &&
-                                              _model.itemImage != '')
                                             Align(
                                               alignment: const AlignmentDirectional(
                                                   0.0, 0.0),
@@ -268,329 +255,301 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                                                 decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                 ),
-                                                child: Image.network(
-                                                  _model.itemImage!,
+                                                child: Image.asset(
+                                                  'assets/images/ItemIcon.png',
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
                                             ),
-                                        ],
+                                            if (_model.itemImage != null &&
+                                                _model.itemImage != '')
+                                              Align(
+                                                alignment: const AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: Container(
+                                                  width: 100.0,
+                                                  height: 100.0,
+                                                  clipBehavior: Clip.antiAlias,
+                                                  decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Image.network(
+                                                    _model.itemImage!,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Align(
-                                      alignment: const AlignmentDirectional(0.0, 0.0),
-                                      child: Text(
-                                        'Upload Image',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .info,
-                                              fontSize: 12.0,
-                                            ),
+                                      Align(
+                                        alignment:
+                                            const AlignmentDirectional(0.0, 0.0),
+                                        child: Text(
+                                          'Upload Image',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .info,
+                                                fontSize: 12.0,
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                    child: TextFormField(
-                      controller: _model.textController1,
-                      focusNode: _model.textFieldFocusNode1,
-                      autofocus: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Item Name',
-                        labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                        hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).primary,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        filled: true,
-                        fillColor: FlutterFlowTheme.of(context).accent2,
-                        suffixIcon: const Icon(
-                          Icons.shopping_cart,
-                        ),
-                      ),
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Readex Pro',
-                            color: FlutterFlowTheme.of(context).primaryText,
-                          ),
-                      validator:
-                          _model.textController1Validator.asValidator(context),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                    child: TextFormField(
-                      controller: _model.textController2,
-                      focusNode: _model.textFieldFocusNode2,
-                      autofocus: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Description',
-                        labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                        hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            width: 2.0,
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                      child: TextFormField(
+                        controller: _model.textController1,
+                        focusNode: _model.textFieldFocusNode1,
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Item Name',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).primary,
-                            width: 2.0,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).error,
-                            width: 2.0,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
+                          filled: true,
+                          fillColor: FlutterFlowTheme.of(context).accent2,
+                          suffixIcon: const Icon(
+                            Icons.shopping_cart,
+                          ),
                         ),
-                        filled: true,
-                        fillColor: FlutterFlowTheme.of(context).accent2,
-                        suffixIcon: const Icon(
-                          Icons.description,
-                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                        validator: _model.textController1Validator
+                            .asValidator(context),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Readex Pro',
-                            color: FlutterFlowTheme.of(context).primaryText,
-                          ),
-                      validator:
-                          _model.textController2Validator.asValidator(context),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
-                    child: FlutterFlowDropDown<String>(
-                      controller: _model.dropDownValueController ??=
-                          FormFieldController<String>(
-                        _model.dropDownValue ??= editItemGroupsRecordList
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                      child: TextFormField(
+                        controller: _model.textController2,
+                        focusNode: _model.textFieldFocusNode2,
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Description',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          filled: true,
+                          fillColor: FlutterFlowTheme.of(context).accent2,
+                          suffixIcon: const Icon(
+                            Icons.description,
+                          ),
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                        validator: _model.textController2Validator
+                            .asValidator(context),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                      child: FlutterFlowDropDown<String>(
+                        controller: _model.dropDownValueController ??=
+                            FormFieldController<String>(null),
+                        options: editItemGroupsRecordList
+                            .map((e) => e.name)
+                            .toList(),
+                        onChanged: (val) =>
+                            setState(() => _model.dropDownValue = val),
+                        width: double.infinity,
+                        height: 50.0,
+                        searchHintTextStyle:
+                            FlutterFlowTheme.of(context).labelMedium,
+                        searchTextStyle:
+                            FlutterFlowTheme.of(context).bodyMedium,
+                        textStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                        hintText: editItemGroupsRecordList
                             .where((e) => e.reference == widget.item?.group)
                             .toList()
                             .first
                             .name,
-                      ),
-                      options:
-                          editItemGroupsRecordList.map((e) => e.name).toList(),
-                      onChanged: (val) =>
-                          setState(() => _model.dropDownValue = val),
-                      width: double.infinity,
-                      height: 50.0,
-                      searchHintTextStyle:
-                          FlutterFlowTheme.of(context).labelMedium,
-                      searchTextStyle: FlutterFlowTheme.of(context).bodyMedium,
-                      textStyle:
-                          FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Readex Pro',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                      hintText: 'Please select a group...',
-                      searchHintText: 'Search for a Group',
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        size: 24.0,
-                      ),
-                      fillColor: FlutterFlowTheme.of(context).accent2,
-                      elevation: 2.0,
-                      borderColor: FlutterFlowTheme.of(context).alternate,
-                      borderWidth: 2.0,
-                      borderRadius: 8.0,
-                      margin:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
-                      hidesUnderline: true,
-                      isOverButton: true,
-                      isSearchable: true,
-                      isMultiSelect: false,
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                    child: Container(
-                      width: 160.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(8.0),
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
+                        searchHintText: 'Search for a Group',
+                        icon: Icon(
+                          Icons.keyboard_arrow_down_rounded,
                           color: FlutterFlowTheme.of(context).secondaryText,
-                          width: 2.0,
+                          size: 24.0,
                         ),
-                      ),
-                      child: FlutterFlowCountController(
-                        decrementIconBuilder: (enabled) => FaIcon(
-                          FontAwesomeIcons.minus,
-                          color: enabled
-                              ? FlutterFlowTheme.of(context).error
-                              : FlutterFlowTheme.of(context).alternate,
-                          size: 20.0,
-                        ),
-                        incrementIconBuilder: (enabled) => FaIcon(
-                          FontAwesomeIcons.plus,
-                          color: enabled
-                              ? FlutterFlowTheme.of(context).secondary
-                              : FlutterFlowTheme.of(context).alternate,
-                          size: 20.0,
-                        ),
-                        countBuilder: (count) => Text(
-                          count.toString(),
-                          style: FlutterFlowTheme.of(context).titleLarge,
-                        ),
-                        count: _model.countControllerValue ??=
-                            widget.item!.count,
-                        updateCount: (count) =>
-                            setState(() => _model.countControllerValue = count),
-                        stepSize: 1,
+                        fillColor: FlutterFlowTheme.of(context).accent2,
+                        elevation: 2.0,
+                        borderColor: FlutterFlowTheme.of(context).alternate,
+                        borderWidth: 2.0,
+                        borderRadius: 8.0,
+                        margin: const EdgeInsetsDirectional.fromSTEB(
+                            16.0, 4.0, 16.0, 4.0),
+                        hidesUnderline: true,
+                        isOverButton: true,
+                        isSearchable: true,
+                        isMultiSelect: false,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 10.0),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        if ((_model.uploadedFileUrl != '') &&
-                            (widget.item?.itemImage != null &&
-                                widget.item?.itemImage != '')) {
-                          await FirebaseStorage.instance
-                              .refFromURL(widget.item!.itemImage)
-                              .delete();
-                        }
-                        _model.selectedGroupRef = await queryGroupsRecordOnce(
-                          queryBuilder: (groupsRecord) => groupsRecord.where(
-                            'Name',
-                            isEqualTo: _model.dropDownValue,
-                          ),
-                          singleRecord: true,
-                        ).then((s) => s.firstOrNull);
-
-                        await widget.item!.reference
-                            .update(createItemsRecordData(
-                          name: _model.textController1.text,
-                          description: _model.textController2.text,
-                          itemImage: _model.itemImage,
-                          count: _model.countControllerValue,
-                          group: _model.selectedGroupRef?.reference,
-                          isBought: false,
-                          isDicarded: false,
-                          isNew: true,
-                          modifiedOn: getCurrentTimestamp,
-                          modifiedBy: currentUserReference,
-                        ));
-                        if (widget.item?.addedBy != currentUserReference) {
-                          triggerPushNotification(
-                            notificationTitle: 'Item Updated',
-                            notificationText:
-                                'Your ShopSync item ${widget.item?.name}has been updated by $currentUserDisplayName',
-                            notificationImageUrl: widget.item?.itemImage,
-                            userRefs: [widget.item!.addedBy!],
-                            initialPageName: 'ItemView',
-                            parameterData: {
-                              'item': widget.item,
-                            },
-                          );
-                        }
-
-                        context.pushNamed(
-                          'HomePage',
-                          queryParameters: {
-                            'selectedGroupRef': serializeParam(
-                              widget.item?.group,
-                              ParamType.DocumentReference,
-                            ),
-                          }.withoutNulls,
-                        );
-
-                        setState(() {});
-                      },
-                      text: 'Update Item',
-                      options: FFButtonOptions(
-                        width: double.infinity,
-                        height: 40.0,
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            24.0, 0.0, 24.0, 0.0),
-                        iconPadding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).secondary,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                ),
-                        elevation: 3.0,
-                        borderSide: const BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                  ),
-                  if (currentUserReference == widget.item?.addedBy)
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 3.0),
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
+                      child: Container(
+                        width: 160.0,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(8.0),
+                          shape: BoxShape.rectangle,
+                          border: Border.all(
+                            color: FlutterFlowTheme.of(context).secondaryText,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: FlutterFlowCountController(
+                          decrementIconBuilder: (enabled) => FaIcon(
+                            FontAwesomeIcons.minus,
+                            color: enabled
+                                ? FlutterFlowTheme.of(context).error
+                                : FlutterFlowTheme.of(context).alternate,
+                            size: 20.0,
+                          ),
+                          incrementIconBuilder: (enabled) => FaIcon(
+                            FontAwesomeIcons.plus,
+                            color: enabled
+                                ? FlutterFlowTheme.of(context).secondary
+                                : FlutterFlowTheme.of(context).alternate,
+                            size: 20.0,
+                          ),
+                          countBuilder: (count) => Text(
+                            count.toString(),
+                            style: FlutterFlowTheme.of(context).titleLarge,
+                          ),
+                          count: _model.countControllerValue ??=
+                              widget.item!.count,
+                          updateCount: (count) => setState(
+                              () => _model.countControllerValue = count),
+                          stepSize: 1,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 10.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          await widget.item!.reference.delete();
-                          if (widget.item?.itemImage != null &&
-                              widget.item?.itemImage != '') {
+                          if ((_model.uploadedFileUrl != '') &&
+                              (widget.item?.itemImage != null &&
+                                  widget.item?.itemImage != '')) {
                             await FirebaseStorage.instance
                                 .refFromURL(widget.item!.itemImage)
                                 .delete();
+                          }
+                          _model.selectedGroupRef = await queryGroupsRecordOnce(
+                            queryBuilder: (groupsRecord) => groupsRecord.where(
+                              'Name',
+                              isEqualTo: _model.dropDownValue,
+                            ),
+                            singleRecord: true,
+                          ).then((s) => s.firstOrNull);
+
+                          await widget.item!.reference
+                              .update(createItemsRecordData(
+                            name: _model.textController1.text,
+                            description: _model.textController2.text,
+                            itemImage: _model.itemImage,
+                            count: _model.countControllerValue,
+                            group: _model.selectedGroupRef?.reference,
+                            isBought: false,
+                            isDicarded: false,
+                            isNew: true,
+                            modifiedOn: getCurrentTimestamp,
+                            modifiedBy: currentUserReference,
+                          ));
+                          if (widget.item?.addedBy != currentUserReference) {
+                            triggerPushNotification(
+                              notificationTitle: 'Item Updated',
+                              notificationText:
+                                  'Your ShopSync item ${widget.item?.name}has been updated by $currentUserDisplayName',
+                              notificationImageUrl: widget.item?.itemImage,
+                              userRefs: [widget.item!.addedBy!],
+                              initialPageName: 'ItemView',
+                              parameterData: {
+                                'item': widget.item,
+                              },
+                            );
                           }
 
                           context.pushNamed(
@@ -602,8 +561,10 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                               ),
                             }.withoutNulls,
                           );
+
+                          setState(() {});
                         },
-                        text: 'Delete  Item',
+                        text: 'Update Item',
                         options: FFButtonOptions(
                           width: double.infinity,
                           height: 40.0,
@@ -611,7 +572,7 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                               24.0, 0.0, 24.0, 0.0),
                           iconPadding: const EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 0.0),
-                          color: FlutterFlowTheme.of(context).error,
+                          color: FlutterFlowTheme.of(context).secondary,
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
                                     fontFamily: 'Readex Pro',
@@ -626,7 +587,56 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                         ),
                       ),
                     ),
-                ],
+                    if (currentUserReference == widget.item?.addedBy)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            15.0, 0.0, 15.0, 3.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            await widget.item!.reference.delete();
+                            if (widget.item?.itemImage != null &&
+                                widget.item?.itemImage != '') {
+                              await FirebaseStorage.instance
+                                  .refFromURL(widget.item!.itemImage)
+                                  .delete();
+                            }
+
+                            context.pushNamed(
+                              'HomePage',
+                              queryParameters: {
+                                'selectedGroupRef': serializeParam(
+                                  widget.item?.group,
+                                  ParamType.DocumentReference,
+                                ),
+                              }.withoutNulls,
+                            );
+                          },
+                          text: 'Delete  Item',
+                          options: FFButtonOptions(
+                            width: double.infinity,
+                            height: 40.0,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).error,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                ),
+                            elevation: 3.0,
+                            borderSide: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                      ),
+                  ].addToEnd(const SizedBox(height: 50.0)),
+                ),
               ),
             ),
           ),

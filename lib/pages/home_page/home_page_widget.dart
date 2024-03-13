@@ -678,6 +678,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     snapshot.data!;
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
+                                  primary: false,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: listViewItemsRecordList.length,
@@ -1017,6 +1018,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     snapshot.data!;
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
+                                  primary: false,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: listViewItemsRecordList.length,
@@ -1377,6 +1379,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     snapshot.data!;
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
+                                  primary: false,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: listViewItemsRecordList.length,

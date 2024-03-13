@@ -1,5 +1,7 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -656,6 +658,8 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                               final usersList = _model.users.toList();
                               return ListView.separated(
                                 padding: EdgeInsets.zero,
+                                primary: false,
+                                shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
                                 itemCount: usersList.length,
                                 separatorBuilder: (_, __) =>
@@ -796,6 +800,27 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                           },
                         ),
                       });
+                      triggerPushNotification(
+                        notificationTitle: 'Group  Edited',
+                        notificationText:
+                            'You have been removed from group ${widget.group?.name} by group admin $currentUserDisplayName',
+                        userRefs: _model.removedUsers
+                            .map((e) => e.reference)
+                            .toList(),
+                        initialPageName: 'HomePageAllItems',
+                        parameterData: {},
+                      );
+                      triggerPushNotification(
+                        notificationTitle: 'New ShopSync Group',
+                        notificationText:
+                            'You have been added to new group ${widget.group?.name} by $currentUserDisplayName',
+                        userRefs:
+                            _model.addedUsers.map((e) => e.reference).toList(),
+                        initialPageName: 'GroupView',
+                        parameterData: {
+                          'group': widget.group,
+                        },
+                      );
                       while (_model.removedUsers.isNotEmpty) {
                         await _model.removedUsers.first.reference.update({
                           ...mapToFirestore(
@@ -861,6 +886,14 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 3.0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      triggerPushNotification(
+                        notificationTitle: 'Group Deleted',
+                        notificationText:
+                            'Group ${widget.group?.name} has been deleted by admin $currentUserDisplayName',
+                        userRefs: _model.users.map((e) => e.reference).toList(),
+                        initialPageName: 'HomePageAllItems',
+                        parameterData: {},
+                      );
                       while (_model.users.isNotEmpty) {
                         _model.currentUser = await UsersRecord.getDocumentOnce(
                             _model.users.first.reference);
@@ -939,7 +972,7 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                     ),
                   ),
                 ),
-              ],
+              ].addToEnd(const SizedBox(height: 50.0)),
             ),
           ),
         ),

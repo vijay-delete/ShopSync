@@ -80,22 +80,6 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Align(
-                      alignment: const AlignmentDirectional(0.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            'assets/images/ShopSyncLogo.png',
-                            width: 200.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding:
                           const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
@@ -613,6 +597,8 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                     final usersList = _model.users.toList();
                                     return ListView.separated(
                                       padding: EdgeInsets.zero,
+                                      primary: false,
+                                      shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       itemCount: usersList.length,
                                       separatorBuilder: (_, __) =>
@@ -761,7 +747,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                           triggerPushNotification(
                             notificationTitle: 'New ShopSync Group',
                             notificationText:
-                                'You have been added to a new group ${_model.group?.name}by $currentUserDisplayName',
+                                'You have been added to a new group ${_model.group?.name} by $currentUserDisplayName',
                             notificationImageUrl: _model.group?.image,
                             userRefs:
                                 _model.users.map((e) => e.reference).toList(),
@@ -862,7 +848,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                         ),
                       ),
                     ),
-                  ],
+                  ].addToEnd(const SizedBox(height: 50.0)),
                 ),
               ),
             ),
