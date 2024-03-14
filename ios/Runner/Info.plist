@@ -40,7 +40,7 @@
         <string>shopsync.com</string>
         <key>CFBundleURLSchemes</key>
         <array>
-        <string>shopsync</string>
+        <string>de1ete</string>
         </array>
         </dict>
     </array>
@@ -59,7 +59,8 @@
     <string>In order to take a picture or video, this app requires permission to access the camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>In order to upload data, this app requires permission to access the photo library.</string>
-
+	<key>NSContactsUsageDescription</key>
+    <string>In order to add members in group, this app requires permission to access contacts</string>
     <key>UIBackgroundModes</key>
     <array>
         <string>fetch</string>

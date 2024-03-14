@@ -36,6 +36,10 @@ class IntialGroupCreationModel
   String? Function(BuildContext, String?)? textController2Validator;
   // Stores action output result for [Firestore Query - Query a collection] action in Icon widget.
   UsersRecord? queriedUser;
+  // Stores action output result for [Custom Action - pickContactFromPhoneBook] action in Container widget.
+  String? selectedPhoneNumber;
+  // Stores action output result for [Firestore Query - Query a collection] action in Container widget.
+  UsersRecord? qeriedUserByContacts;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
   GroupsRecord? group;
 

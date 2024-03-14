@@ -6,6 +6,8 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/permissions_util.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'intial_group_creation_model.dart';
@@ -108,6 +110,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                                 final selectedMedia =
                                     await selectMediaWithSourceBottomSheet(
                                   context: context,
+                                  maxWidth: 500.00,
                                   imageQuality: 10,
                                   allowPhoto: true,
                                 );
@@ -330,7 +333,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 10.0),
                       child: Stack(
                         children: [
                           Align(
@@ -425,7 +428,7 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 10.0),
                       child: Stack(
                         children: [
                           if (_model.queriedUser?.displayName != null &&
@@ -537,7 +540,128 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      child: Text(
+                        'OR',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 10.0),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: const AlignmentDirectional(0.0, 0.0),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                await requestPermission(contactsPermission);
+                                _model.selectedPhoneNumber =
+                                    await actions.pickContactFromPhoneBook();
+                                if (_model.selectedPhoneNumber != null &&
+                                    _model.selectedPhoneNumber != '') {
+                                  _model.qeriedUserByContacts =
+                                      await queryUsersRecordOnce(
+                                    queryBuilder: (usersRecord) =>
+                                        usersRecord.where(
+                                      'phone_number',
+                                      isEqualTo: _model.selectedPhoneNumber,
+                                    ),
+                                    singleRecord: true,
+                                  ).then((s) => s.firstOrNull);
+                                  if (_model.qeriedUserByContacts?.uid !=
+                                          null &&
+                                      _model.qeriedUserByContacts?.uid != '') {
+                                    setState(() {
+                                      _model.addToUsers(
+                                          _model.qeriedUserByContacts!);
+                                    });
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (alertDialogContext) {
+                                        return AlertDialog(
+                                          title: const Text('Alert'),
+                                          content: Text(
+                                              'Contact \"${_model.selectedPhoneNumber}\" is not registered with ShopSync'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext),
+                                              child: const Text('Ok'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                } else {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        title: const Text('Error'),
+                                        content: const Text(
+                                            'Selected contact is empty, please select another'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: const Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+
+                                setState(() {});
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: 45.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).accent2,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(
+                                    color:
+                                        FlutterFlowTheme.of(context).alternate,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      'Select Contact',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Icon(
+                                      Icons.contacts_outlined,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 24.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
                       child: Stack(
                         children: [
                           Align(
@@ -547,9 +671,15 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                               height: 30.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context).accent2,
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(0.0),
+                                  bottomRight: Radius.circular(0.0),
+                                  topLeft: Radius.circular(8.0),
+                                  topRight: Radius.circular(8.0),
+                                ),
                                 border: Border.all(
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                 ),
                               ),
                               child: Padding(
@@ -585,9 +715,15 @@ class _IntialGroupCreationWidgetState extends State<IntialGroupCreationWidget> {
                               height: 116.0,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context).accent2,
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(8.0),
+                                  bottomRight: Radius.circular(8.0),
+                                  topLeft: Radius.circular(0.0),
+                                  topRight: Radius.circular(0.0),
+                                ),
                                 border: Border.all(
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
                                 ),
                               ),
                               child: Align(

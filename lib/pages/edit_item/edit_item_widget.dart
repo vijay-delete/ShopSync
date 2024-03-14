@@ -137,6 +137,7 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                                 final selectedMedia =
                                     await selectMediaWithSourceBottomSheet(
                                   context: context,
+                                  maxWidth: 500.00,
                                   imageQuality: 10,
                                   allowPhoto: true,
                                 );

@@ -89,6 +89,18 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Align(
+                      alignment: const AlignmentDirectional(0.0, -1.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset(
+                          'assets/images/ShopSyncLogo.png',
+                          width: 200.0,
+                          height: 200.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                     Stack(
                       children: [
                         Container(
@@ -110,7 +122,7 @@ class _ProfileViewWidgetState extends State<ProfileViewWidget> {
                                       shape: BoxShape.circle,
                                     ),
                                     child: Image.asset(
-                                      'assets/images/UserIcon.png',
+                                      'assets/images/ShopSyncRing.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),

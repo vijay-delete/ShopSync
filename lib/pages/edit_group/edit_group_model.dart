@@ -85,6 +85,10 @@ class EditGroupModel extends FlutterFlowModel<EditGroupWidget> {
   String? Function(BuildContext, String?)? textController3Validator;
   // Stores action output result for [Firestore Query - Query a collection] action in Icon widget.
   UsersRecord? queriedUser;
+  // Stores action output result for [Custom Action - pickContactFromPhoneBook] action in Container widget.
+  String? selectedPhoneNumber;
+  // Stores action output result for [Firestore Query - Query a collection] action in Container widget.
+  UsersRecord? qeriedUserByContacts;
   // Stores action output result for [Backend Call - Read Document] action in Button widget.
   UsersRecord? currentUser;
 

@@ -241,6 +241,7 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                         child: TextFormField(
                           controller: _model.textController2,
                           focusNode: _model.textFieldFocusNode2,
+                          onFieldSubmitted: (_) async {},
                           autofocus: true,
                           readOnly: true,
                           obscureText: false,
