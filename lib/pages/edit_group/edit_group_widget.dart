@@ -644,6 +644,10 @@ class _EditGroupWidgetState extends State<EditGroupWidget> {
                                   _model
                                       .addToUsers(_model.qeriedUserByContacts!);
                                 });
+                                setState(() {
+                                  _model.addToAddedUsers(
+                                      _model.qeriedUserByContacts!);
+                                });
                               } else {
                                 await showDialog(
                                   context: context,

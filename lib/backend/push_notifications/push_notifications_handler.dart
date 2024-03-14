@@ -162,6 +162,11 @@ final parametersBuilderMap =
               getParameter<DocumentReference>(data, 'selectGroupRef'),
         },
       ),
+  'joinGrouByLink': (data) async => ParameterData(
+        allParams: {
+          'groupRef': getParameter<DocumentReference>(data, 'groupRef'),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

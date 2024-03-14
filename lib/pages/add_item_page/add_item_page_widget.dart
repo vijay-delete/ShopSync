@@ -426,49 +426,69 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               15.0, 0.0, 15.0, 20.0),
-                          child: FlutterFlowDropDown<String>(
-                            controller: _model.dropDownValueController ??=
-                                FormFieldController<String>(null),
-                            options: addItemPageGroupsRecordList
-                                .map((e) => e.name)
-                                .toList(),
-                            onChanged: (val) =>
-                                setState(() => _model.dropDownValue = val),
-                            width: double.infinity,
-                            height: 50.0,
-                            searchHintTextStyle:
-                                FlutterFlowTheme.of(context).labelMedium,
-                            searchTextStyle:
-                                FlutterFlowTheme.of(context).bodyMedium,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
+                          child: StreamBuilder<GroupsRecord>(
+                            stream: GroupsRecord.getDocument(widget.groupRef!),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              final dropDownGroupsRecord = snapshot.data!;
+                              return FlutterFlowDropDown<String>(
+                                controller: _model.dropDownValueController ??=
+                                    FormFieldController<String>(
+                                  _model.dropDownValue ??=
+                                      dropDownGroupsRecord.name,
                                 ),
-                            hintText: addItemPageGroupsRecordList
-                                .where((e) => widget.groupRef == e.reference)
-                                .toList()
-                                .first
-                                .name,
-                            searchHintText: 'Search for a Group',
-                            icon: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 24.0,
-                            ),
-                            fillColor: FlutterFlowTheme.of(context).accent2,
-                            elevation: 2.0,
-                            borderColor: FlutterFlowTheme.of(context).alternate,
-                            borderWidth: 2.0,
-                            borderRadius: 8.0,
-                            margin: const EdgeInsetsDirectional.fromSTEB(
-                                16.0, 4.0, 16.0, 4.0),
-                            hidesUnderline: true,
-                            isOverButton: true,
-                            isSearchable: true,
-                            isMultiSelect: false,
+                                options: addItemPageGroupsRecordList
+                                    .map((e) => e.name)
+                                    .toList(),
+                                onChanged: (val) =>
+                                    setState(() => _model.dropDownValue = val),
+                                width: double.infinity,
+                                height: 50.0,
+                                searchHintTextStyle:
+                                    FlutterFlowTheme.of(context).labelMedium,
+                                searchTextStyle:
+                                    FlutterFlowTheme.of(context).bodyMedium,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                searchHintText: 'Search for a Group',
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  size: 24.0,
+                                ),
+                                fillColor: FlutterFlowTheme.of(context).accent2,
+                                elevation: 2.0,
+                                borderColor:
+                                    FlutterFlowTheme.of(context).alternate,
+                                borderWidth: 2.0,
+                                borderRadius: 8.0,
+                                margin: const EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 4.0, 16.0, 4.0),
+                                hidesUnderline: true,
+                                isOverButton: false,
+                                isSearchable: true,
+                                isMultiSelect: false,
+                              );
+                            },
                           ),
                         ),
                         Padding(
@@ -519,7 +539,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                               15.0, 0.0, 15.0, 20.0),
                           child: FFButtonWidget(
                             onPressed: () async {
-                              _model.selectedGroupRef =
+                              _model.selectedGroup =
                                   await queryGroupsRecordOnce(
                                 queryBuilder: (groupsRecord) =>
                                     groupsRecord.where(
@@ -546,7 +566,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                                   isBought: false,
                                   isDicarded: false,
                                   isNew: true,
-                                  group: _model.selectedGroupRef?.reference,
+                                  group: _model.selectedGroup?.reference,
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -564,7 +584,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                                   isBought: false,
                                   isDicarded: false,
                                   isNew: true,
-                                  group: _model.selectedGroupRef?.reference,
+                                  group: _model.selectedGroup?.reference,
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -576,8 +596,7 @@ class _AddItemPageWidgetState extends State<AddItemPageWidget> {
                                 notificationTitle: 'Item Added',
                                 notificationText:
                                     'An Item has been added to group ${_model.dropDownValue} by $currentUserDisplayName Item name : ${_model.textController1.text}',
-                                userRefs:
-                                    _model.selectedGroupRef!.users.toList(),
+                                userRefs: _model.selectedGroup!.users.toList(),
                                 initialPageName: 'ItemView',
                                 parameterData: {
                                   'item': _model.item,

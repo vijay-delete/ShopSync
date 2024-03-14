@@ -421,7 +421,13 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                           const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
                       child: FlutterFlowDropDown<String>(
                         controller: _model.dropDownValueController ??=
-                            FormFieldController<String>(null),
+                            FormFieldController<String>(
+                          _model.dropDownValue ??= editItemGroupsRecordList
+                              .where((e) => e.reference == widget.item?.group)
+                              .toList()
+                              .first
+                              .name,
+                        ),
                         options: editItemGroupsRecordList
                             .map((e) => e.name)
                             .toList(),
@@ -439,11 +445,6 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                               fontFamily: 'Readex Pro',
                               color: FlutterFlowTheme.of(context).primaryText,
                             ),
-                        hintText: editItemGroupsRecordList
-                            .where((e) => e.reference == widget.item?.group)
-                            .toList()
-                            .first
-                            .name,
                         searchHintText: 'Search for a Group',
                         icon: Icon(
                           Icons.keyboard_arrow_down_rounded,
@@ -458,7 +459,7 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                         margin: const EdgeInsetsDirectional.fromSTEB(
                             16.0, 4.0, 16.0, 4.0),
                         hidesUnderline: true,
-                        isOverButton: true,
+                        isOverButton: false,
                         isSearchable: true,
                         isMultiSelect: false,
                       ),

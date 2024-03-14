@@ -1,20 +1,23 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'join_group_widget.dart' show JoinGroupWidget;
+import 'join_grou_by_link_widget.dart' show JoinGrouByLinkWidget;
 import 'package:flutter/material.dart';
 
-class JoinGroupModel extends FlutterFlowModel<JoinGroupWidget> {
+class JoinGrouByLinkModel extends FlutterFlowModel<JoinGrouByLinkWidget> {
+  ///  Local state fields for this page.
+
+  bool isMember = false;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  // Stores action output result for [Backend Call - Read Document] action in joinGrouByLink widget.
+  GroupsRecord? group;
+  String currentPageLink = '';
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode1;
   TextEditingController? textController1;
   String? Function(BuildContext, String?)? textController1Validator;
-  // Stores action output result for [Firestore Query - Query a collection] action in IconButton widget.
-  GroupsRecord? group;
-  // Stores action output result for [Firestore Query - Query a collection] action in IconButton widget.
-  List<UsersRecord>? users;
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode2;
   TextEditingController? textController2;
@@ -23,11 +26,6 @@ class JoinGroupModel extends FlutterFlowModel<JoinGroupWidget> {
   FocusNode? textFieldFocusNode3;
   TextEditingController? textController3;
   String? Function(BuildContext, String?)? textController3Validator;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode4;
-  TextEditingController? textController4;
-  String? Function(BuildContext, String?)? textController4Validator;
-  String currentPageLink = '';
 
   /// Initialization and disposal methods.
 
@@ -45,9 +43,6 @@ class JoinGroupModel extends FlutterFlowModel<JoinGroupWidget> {
 
     textFieldFocusNode3?.dispose();
     textController3?.dispose();
-
-    textFieldFocusNode4?.dispose();
-    textController4?.dispose();
   }
 
   /// Action blocks are added here.

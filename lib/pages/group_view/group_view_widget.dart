@@ -5,7 +5,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 import 'group_view_model.dart';
 export 'group_view_model.dart';
 
@@ -34,14 +33,20 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
     _model.textController1 ??= TextEditingController(text: widget.group?.name);
     _model.textFieldFocusNode1 ??= FocusNode();
 
-    _model.textController2 ??=
-        TextEditingController(text: widget.group?.reference.id);
+    _model.textController2 ??= TextEditingController(
+        text:
+            'https://de1eteshopsync.page.link?apn=com.mycompany.shopsync&ibi=com.mycompany.shopsync&link=https%3A%2F%2Fde1eteshopsync.page.link%2FjoinGroupByLink%3FgroupRef%3D${widget.group?.reference.id}');
     _model.textFieldFocusNode2 ??= FocusNode();
     _model.textFieldFocusNode2!.addListener(
       () async {
-        await Share.share(
-          _model.textController2.text,
-          sharePositionOrigin: getWidgetBoundingBox(context),
+        context.pushNamed(
+          'joinGrouByLink',
+          queryParameters: {
+            'groupRef': serializeParam(
+              widget.group?.reference,
+              ParamType.DocumentReference,
+            ),
+          }.withoutNulls,
         );
       },
     );
@@ -234,66 +239,60 @@ class _GroupViewWidgetState extends State<GroupViewWidget> {
                             .asValidator(context),
                       ),
                     ),
-                    Builder(
-                      builder: (context) => Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            15.0, 0.0, 15.0, 20.0),
-                        child: TextFormField(
-                          controller: _model.textController2,
-                          focusNode: _model.textFieldFocusNode2,
-                          onFieldSubmitted: (_) async {},
-                          autofocus: true,
-                          readOnly: true,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            labelText: 'Group Code (Click to share)',
-                            labelStyle:
-                                FlutterFlowTheme.of(context).labelMedium,
-                            hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).alternate,
-                                width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 20.0),
+                      child: TextFormField(
+                        controller: _model.textController2,
+                        focusNode: _model.textFieldFocusNode2,
+                        autofocus: true,
+                        readOnly: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Group joining link (Click to share)',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            filled: true,
-                            fillColor: FlutterFlowTheme.of(context).accent2,
-                            suffixIcon: Icon(
-                              Icons.share,
-                              color: FlutterFlowTheme.of(context).primary,
-                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'Readex Pro',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                          validator: _model.textController2Validator
-                              .asValidator(context),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          filled: true,
+                          fillColor: FlutterFlowTheme.of(context).accent2,
+                          suffixIcon: Icon(
+                            Icons.share,
+                            color: FlutterFlowTheme.of(context).primary,
+                          ),
                         ),
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                        validator: _model.textController2Validator
+                            .asValidator(context),
                       ),
                     ),
                     Padding(
