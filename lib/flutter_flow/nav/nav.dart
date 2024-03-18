@@ -185,12 +185,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'JoinGroup',
-          path: '/joinGroup',
-          requireAuth: true,
-          builder: (context, params) => const JoinGroupWidget(),
-        ),
-        FFRoute(
           name: 'ProfileView',
           path: '/profileView',
           requireAuth: true,

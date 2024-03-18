@@ -13,7 +13,6 @@ export '/pages/edit_group/edit_group_widget.dart' show EditGroupWidget;
 export '/pages/home_page_all_items/home_page_all_items_widget.dart'
     show HomePageAllItemsWidget;
 export '/pages/group_view/group_view_widget.dart' show GroupViewWidget;
-export '/pages/join_group/join_group_widget.dart' show JoinGroupWidget;
 export '/pages/profile_view/profile_view_widget.dart' show ProfileViewWidget;
 export '/pages/edit_profile/edit_profile_widget.dart' show EditProfileWidget;
 export '/pages/join_grou_by_link/join_grou_by_link_widget.dart'

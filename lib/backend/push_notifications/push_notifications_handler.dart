@@ -149,7 +149,6 @@ final parametersBuilderMap =
               data, 'group', GroupsRecord.fromSnapshot),
         },
       ),
-  'JoinGroup': ParameterData.none(),
   'ProfileView': (data) async => ParameterData(
         allParams: {
           'selectedGroupRef':
